@@ -16,6 +16,12 @@ load.
 Defining credentials happens through our Custom Resource Definition. We have
 2 ways of defining how you would like to get credentials.
 
+**Note:** Currently, Kubernetes does not provide a way to validate CRDs. Because
+of this, we advice you to double check your definitions and monitor the output
+of the controller if you experience issues. Adding validation
+[is a work in progress](https://github.com/kubernetes/community/pull/708). Once
+this is added to the Kubernetes core, we'll look at providing this as well.
+
 **Note:** The minimum requirement to define a specific credential is it's key.
 If you provide a name, this name will be used as a key reference in the k8s
 secret. A default value can also be provided. If a default value is provided for
@@ -25,44 +31,12 @@ will be used to populate the credential.
 #### Project
 
 You can load multiple credentials in one go for a specific project, you can do
-this as follows:
-
-```yaml
-apiVersion: manifold.co/v1
-kind: Project
-metadata:
-  name: manifold-terraform-project # required; this will be the name of the secret we'll write to and which you can use to reference
-spec:
-  project: manifold-terraform # required; project label
-  team: manifold # optional; the team to load the credential from
-  resources: # optional; load all resources by default, just like with terraform
-    - resource: custom-resource1 # this one loads the specific credentials listed below
-      credentials:
-        - key: TOKEN_ID
-    - resource: custom-resource2 # this one loads all credentials for this resource
-```
+this [as described in this manifest file](_examples/project/manifest.yml).
 
 #### Resource
 
 If you only want to get the credentials from a specific resource, you can do
-this as follows:
-
-```yaml
-apiVersion: manifold.co/v1
-kind: Resource
-metadata:
-  name: manifold-terraform-resource # required; this will be the name of the secret we'll write to and which you can use to reference
-spec:
-  resource: custom-resource1 # required; resource label
-  project: manifold-terraform # optional; project label
-  team: manifold # optional; team label
-  credentials:
-    - key: TOKEN_ID
-    - key: TOKEN_SECRET # alias the name to alias-name which we can use later on
-      name: alias-name
-    - key: NON_EXISTING # set a default value for a non existing credential
-      default: "my-default-value"
-```
+this [as described in this manifest file](_examples/resource/manifest.yml).
 
 ### Referencing the credentials
 
@@ -73,42 +47,7 @@ when a credential changes, the secret will also be updated automatically with
 the new value.
 
 By using exsiting Kubernetes secrets, we allow you to use the Manifold
-credentials as secrets:
-
-```yaml
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: my-service
-spec:
-  replicas: 2
-  spec:
-    nodeSelector: {}
-    containers:
-      - name: my-service
-        image: manifoldco/my-service:latest
-        env:
-          - name: CUSTOM_TOKEN_ID
-            valueFrom:
-              secretKeyRef:
-                name: secret-manifold-project
-                key: TOKEN_ID
-          - name: RESOURCE2_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: secret-manifold-project
-                key: USERNAME
-          - name: CUSTOM_TOKEN_SECRET
-            valueFrom:
-              secretKeyRef:
-                name: secret-manifold-resource
-                key: alias-name
-          - name: NON_EXISTING_TOKEN
-            valueFrom:
-              secretKeyRef:
-                name: secret-manifold-resource
-                key: NON_EXISTING
-```
+credentials as secrets. We've [provided an example manifest file](_examples/secrets-usage/manifest.yml).
 
 ## Installation
 

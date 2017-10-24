@@ -1,0 +1,12 @@
+apiVersion: manifold.co/v1
+kind: Project
+metadata:
+  name: manifold-terraform-project # required; this will be the name of the secret we'll write to and which you can use to reference
+spec:
+  project: manifold-terraform # required; project label
+  team: manifold # optional; the team to load the credential from
+  resources: # optional; load all resources by default, just like with terraform
+    - resource: custom-resource1 # this one loads the specific credentials listed below
+      credentials:
+        - key: TOKEN_ID
+    - resource: custom-resource2 # this one loads all credentials for this resource
