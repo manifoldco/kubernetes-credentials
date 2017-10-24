@@ -1,0 +1,35 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: my-service
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: my-service
+    spec:
+      containers:
+        - name: my-service
+          image: manifoldco/my-service:latest
+          env:
+            - name: CUSTOM_TOKEN_ID
+              valueFrom:
+                secretKeyRef:
+                  name: secret-manifold-project
+                  key: TOKEN_ID
+            - name: RESOURCE2_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: secret-manifold-project
+                  key: USERNAME
+            - name: CUSTOM_TOKEN_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: secret-manifold-resource
+                  key: alias-name
+            - name: NON_EXISTING_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: secret-manifold-resource
+                  key: NON_EXISTING

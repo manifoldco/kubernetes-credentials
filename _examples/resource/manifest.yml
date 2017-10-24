@@ -1,0 +1,14 @@
+apiVersion: manifold.co/v1
+kind: Resource
+metadata:
+  name: manifold-terraform-resource # required; this will be the name of the secret we'll write to and which you can use to reference
+spec:
+  resource: custom-resource1 # required; resource label
+  project: manifold-terraform # optional; project label
+  team: manifold # optional; team label
+  credentials:
+    - key: TOKEN_ID
+    - key: TOKEN_SECRET # alias the name to alias-name which we can use later on
+      name: alias-name
+    - key: NON_EXISTING # set a default value for a non existing credential
+      default: "my-default-value"
