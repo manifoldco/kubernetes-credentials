@@ -1,5 +1,14 @@
 # Kubernetes Credentials
 
+[Homepage](https://manifold.co) |
+[Twitter](https://twitter.com/manifoldco) |
+[Code of Conduct](./.github/CONDUCT.md) |
+[Contribution Guidelines](./.github/CONTRIBUTING.md)
+
+[![Build Status](https://travis-ci.com/manifoldco/kubernetes-credentials.svg?token=SbTMbCYMT5HWVmmTnBoj&branch=master)](https://travis-ci.com/manifoldco/kubernetes-credentials)
+[![Go Report Card](https://goreportcard.com/badge/github.com/manifoldco/kubernetes-credentials)](https://goreportcard.com/report/github.com/manifoldco/kubernetes-credentials)
+[![License](https://img.shields.io/badge/license-BSD-blue.svg)](./LICENSE)
+
 This package allows you to load [Manifold](https://www.manifold.co/) credentials
 into your Kubernetes cluster. These credentials will be stored as a Kubernetes
 secrets so you can use them as such in your deployments.
