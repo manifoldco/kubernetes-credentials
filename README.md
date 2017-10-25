@@ -2,7 +2,7 @@
 
 [Homepage](https://manifold.co) |
 [Twitter](https://twitter.com/manifoldco) |
-[Code of Conduct](./.github/CONDUCT.md) |
+[Code of Conduct](./.github/CODE_OF_CONDUCT.md) |
 [Contribution Guidelines](./.github/CONTRIBUTING.md)
 
 [![Build Status](https://travis-ci.com/manifoldco/kubernetes-credentials.svg?token=SbTMbCYMT5HWVmmTnBoj&branch=master)](https://travis-ci.com/manifoldco/kubernetes-credentials)
