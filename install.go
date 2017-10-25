@@ -6,8 +6,7 @@ import (
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/manifoldco/k8s-credentials/crd/project"
-	"github.com/manifoldco/k8s-credentials/crd/resource"
+	"github.com/manifoldco/k8s-credentials/helpers/crd"
 )
 
 func main() {
@@ -21,11 +20,15 @@ func main() {
 		panic(err)
 	}
 
-	apiextensionsclientset, err := apiextensionsclient.NewForConfig(config)
+	cs, err := apiextensionsclient.NewForConfig(config)
 	if err != nil {
 		panic(err)
 	}
 
-	project.CreateCRD(apiextensionsclientset)
-	resource.CreateCRD(apiextensionsclientset)
+	if err := crd.CreateCRD(cs, "Project", "projects", "manifold.co", "v1"); err != nil {
+		panic(err)
+	}
+	if err := crd.CreateCRD(cs, "Resource", "resources", "manifold.co", "v1"); err != nil {
+		panic(err)
+	}
 }

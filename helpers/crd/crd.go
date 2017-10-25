@@ -13,7 +13,7 @@ import (
 
 // CreateCRD is a wrapper to create a CRD from scratch with a set of params.
 func CreateCRD(cs apiextensionsclient.Interface, name, plural, group, version string) error {
-	fullName := plural + "." + version
+	fullName := plural + "." + group
 
 	crd := &apiextv1beta1.CustomResourceDefinition{
 		ObjectMeta: metav1.ObjectMeta{
