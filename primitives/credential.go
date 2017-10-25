@@ -16,3 +16,10 @@ func (c *CredentialSpec) Valid() bool {
 
 	return true
 }
+
+// CredentialValue is a simple representation of the actual key/value of a
+// Credential.
+type CredentialValue struct {
+	CredentialSpec `json:",inline"`
+	Value          string `json:"value"`
+}

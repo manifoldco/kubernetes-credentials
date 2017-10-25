@@ -14,10 +14,22 @@
   revision = "de5bf2ad457846296e2031421a34e2568e304e35"
 
 [[projects]]
+  name = "github.com/asaskevich/govalidator"
+  packages = ["."]
+  revision = "7b3beb6df3c42abd3509abfc3bcacc0fbfb7c877"
+  version = "v5"
+
+[[projects]]
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
   revision = "346938d642f2ec3594ed81d874461961cd0faa76"
   version = "v1.1.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/dchest/blake2b"
+  packages = ["."]
+  revision = "06006a921c7d13e3fdf63c401cb0e4529a26e6e4"
 
 [[projects]]
   name = "github.com/emicklei/go-restful"
@@ -39,6 +51,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/go-openapi/errors"
+  packages = ["."]
+  revision = "03cfca65330da08a5a440053faf994a3c682b5bf"
+
+[[projects]]
+  branch = "master"
   name = "github.com/go-openapi/jsonpointer"
   packages = ["."]
   revision = "779f45308c19820f1a69e9a4cd965f496e0da10f"
@@ -51,9 +69,21 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/go-openapi/runtime"
+  packages = ["."]
+  revision = "e8231e16de5bcda9839e03ae07c5c96a1fd82041"
+
+[[projects]]
+  branch = "master"
   name = "github.com/go-openapi/spec"
   packages = ["."]
   revision = "84b5bee7bcb76f3d17bcbaf421bac44bd5709ca6"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/go-openapi/strfmt"
+  packages = ["."]
+  revision = "610b6cacdcde6852f4de68998bd20ce1dac85b22"
 
 [[projects]]
   branch = "master"
@@ -134,6 +164,30 @@
   revision = "4d347d79dea0067c945f374f990601decb08abb5"
 
 [[projects]]
+  name = "github.com/manifoldco/go-base32"
+  packages = ["."]
+  revision = "b6687e64fc5e75d8bb58badb858d79c46b0eee96"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/manifoldco/go-base64"
+  packages = ["."]
+  revision = "bb5e620cf51d2bbe78e624a2c27117655ce73acc"
+  version = "v1.0.0"
+
+[[projects]]
+  name = "github.com/manifoldco/go-manifold"
+  packages = [".","errors","idtype"]
+  revision = "5b30fa4d9c5ab565fe16b81185c2f1590e3aad1e"
+  version = "v0.8.3"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+
+[[projects]]
   branch = "master"
   name = "github.com/petar/GoLLRB"
   packages = ["llrb"]
@@ -154,13 +208,13 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
+  packages = ["ed25519","ed25519/internal/edwards25519","pbkdf2","scrypt","ssh/terminal"]
   revision = "2509b142fb2b797aa7587dad548f113b2c0f20ce"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
-  packages = ["http2","http2/hpack","idna","lex/httplex"]
+  packages = ["context","http2","http2/hpack","idna","lex/httplex"]
   revision = "92447d55896d6f92b4a0d4fd83bd078b0374e8fa"
 
 [[projects]]
@@ -180,6 +234,12 @@
   packages = ["."]
   revision = "3887ee99ecf07df5b447e9b00d9c0b2adaa9f3e4"
   version = "v0.9.0"
+
+[[projects]]
+  branch = "v2"
+  name = "gopkg.in/mgo.v2"
+  packages = ["bson","internal/json"]
+  revision = "3f83fa5005286a7fe593b055f0d7771a7dce4655"
 
 [[projects]]
   branch = "v2"
@@ -220,6 +280,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "24eda3dfd3834db8536b2cd36d8565e5ef963b6c3b1561293fb209e0833b6843"
+  inputs-digest = "bf5ce982fbaaeefc3943c88717c757731580e05b34bcba77ba1e88a90a5d0103"
   solver-name = "gps-cdcl"
   solver-version = 1
