@@ -7,6 +7,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 
 	"github.com/manifoldco/k8s-credentials/helpers/crd"
+	"github.com/manifoldco/k8s-credentials/primitives"
 )
 
 func main() {
@@ -25,10 +26,10 @@ func main() {
 		panic(err)
 	}
 
-	if err := crd.CreateCRD(cs, "Project", "projects", "manifold.co", "v1"); err != nil {
+	if err := crd.CreateCRD(cs, primitives.CRDProjectsName, primitives.CRDProjectsPlural, primitives.CRDGroup, primitives.CRDVersion); err != nil {
 		panic(err)
 	}
-	if err := crd.CreateCRD(cs, "Resource", "resources", "manifold.co", "v1"); err != nil {
+	if err := crd.CreateCRD(cs, primitives.CRDResourcesName, primitives.CRDResourcesPlural, primitives.CRDGroup, primitives.CRDVersion); err != nil {
 		panic(err)
 	}
 }
