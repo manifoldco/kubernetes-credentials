@@ -1,6 +1,8 @@
 package primitives
 
 import (
+	"fmt"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -15,6 +17,7 @@ type Project struct {
 // Valid will validate the Project.
 func (p *Project) Valid() bool {
 	if p.Spec == nil {
+		fmt.Println("no project spec")
 		return false
 	}
 
@@ -41,6 +44,7 @@ type ProjectSpec struct {
 // Valid will validate the ProjectSpec.
 func (p *ProjectSpec) Valid() bool {
 	if p.Label == "" {
+		fmt.Println("no project spec label")
 		return false
 	}
 

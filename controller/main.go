@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -39,7 +38,6 @@ func main() {
 		return &str
 	}
 
-	fmt.Println(os.Getenv("MANIFOLD_API_TOKEN"), os.Getenv("MANIFOLD_TEAM"))
 	manifoldClient := manifold.New(manifold.WithAPIToken(os.Getenv("MANIFOLD_API_TOKEN")))
 	wrapper, err := client.New(manifoldClient, ptr(os.Getenv("MANIFOLD_TEAM")))
 	if err != nil {

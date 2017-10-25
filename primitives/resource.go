@@ -1,6 +1,8 @@
 package primitives
 
 import (
+	"fmt"
+
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -15,6 +17,7 @@ type Resource struct {
 // Valid will validate the resource.
 func (r *Resource) Valid() bool {
 	if r.Spec == nil {
+		fmt.Println("no resource spec")
 		return false
 	}
 
@@ -41,6 +44,7 @@ type ResourceSpec struct {
 // Valid will validate the ResourceSpec.
 func (r *ResourceSpec) Valid() bool {
 	if r.Label == "" {
+		fmt.Println("no resource spec label")
 		return false
 	}
 

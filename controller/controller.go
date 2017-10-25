@@ -61,7 +61,6 @@ func (c *Controller) watchProjects(ctx context.Context) error {
 
 func (c *Controller) onProjectAdd(obj interface{}) {
 	project := obj.(*primitives.Project)
-	fmt.Println(project.Spec)
 	ctx := context.Background()
 
 	label := primitives.NewLabel(project.Spec.Label)
@@ -71,7 +70,8 @@ func (c *Controller) onProjectAdd(obj interface{}) {
 		return
 	}
 
-	fmt.Println(creds)
+	fmt.Println("Received a new resource!")
+	fmt.Println(client.FlattenResourcesCredentialValues(creds))
 }
 
 func (c *Controller) onProjectUpdate(old, new interface{}) {
