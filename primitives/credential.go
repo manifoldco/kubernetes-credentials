@@ -1,5 +1,7 @@
 package primitives
 
+import "log"
+
 // CredentialSpec represents the specification that is required to filter out
 // specific credentials in the Resource spec.
 type CredentialSpec struct {
@@ -11,6 +13,7 @@ type CredentialSpec struct {
 // Valid will validate the CredentialSpec.
 func (c *CredentialSpec) Valid() bool {
 	if c.Key == "" {
+		log.Printf("Credential: invalid key")
 		return false
 	}
 

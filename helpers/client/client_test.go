@@ -16,7 +16,7 @@ func TestGetResource(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("without a valid resource", func(t *testing.T) {
-		invalidResource := &primitives.Resource{}
+		invalidResource := &primitives.ResourceSpec{}
 
 		_, err := testClient.GetResource(ctx, nil, invalidResource)
 		expectErrorEqual(t, err, client.ErrResourceInvalid)
@@ -24,10 +24,8 @@ func TestGetResource(t *testing.T) {
 
 	t.Run("with a valid resource", func(t *testing.T) {
 		t.Run("with a non-existing project", func(t *testing.T) {
-			resource := &primitives.Resource{
-				Spec: &primitives.ResourceSpec{
-					Label: "custom-resource1",
-				},
+			resource := &primitives.ResourceSpec{
+				Label: "custom-resource1",
 			}
 
 			_, err := testClient.GetResource(ctx, strPtr("non-existing"), resource)
@@ -38,10 +36,8 @@ func TestGetResource(t *testing.T) {
 			project := strPtr("manifold-terraform")
 
 			t.Run("with an existing resource", func(t *testing.T) {
-				resource := &primitives.Resource{
-					Spec: &primitives.ResourceSpec{
-						Label: "custom-resource1",
-					},
+				resource := &primitives.ResourceSpec{
+					Label: "custom-resource1",
 				}
 
 				res, err := testClient.GetResource(ctx, project, resource)
@@ -52,10 +48,8 @@ func TestGetResource(t *testing.T) {
 			})
 
 			t.Run("with a non existing resource", func(t *testing.T) {
-				resource := &primitives.Resource{
-					Spec: &primitives.ResourceSpec{
-						Label: "non-existing-resource",
-					},
+				resource := &primitives.ResourceSpec{
+					Label: "non-existing-resource",
 				}
 
 				_, err := testClient.GetResource(ctx, project, resource)
@@ -69,23 +63,19 @@ func TestGetResources(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("with an invalid resource", func(t *testing.T) {
-		invalidResource := &primitives.Resource{}
+		invalidResource := &primitives.ResourceSpec{}
 
-		_, err := testClient.GetResources(ctx, nil, []*primitives.Resource{invalidResource})
+		_, err := testClient.GetResources(ctx, nil, []*primitives.ResourceSpec{invalidResource})
 		expectErrorEqual(t, err, client.ErrResourceInvalid)
 	})
 
 	t.Run("with valid resources", func(t *testing.T) {
-		resources := []*primitives.Resource{
-			&primitives.Resource{
-				Spec: &primitives.ResourceSpec{
-					Label: "custom-resource1",
-				},
+		resources := []*primitives.ResourceSpec{
+			&primitives.ResourceSpec{
+				Label: "custom-resource1",
 			},
-			&primitives.Resource{
-				Spec: &primitives.ResourceSpec{
-					Label: "custom-resource2",
-				},
+			&primitives.ResourceSpec{
+				Label: "custom-resource2",
 			},
 		}
 
@@ -98,10 +88,8 @@ func TestGetResources(t *testing.T) {
 			project := strPtr("manifold-terraform")
 
 			t.Run("with one non-existing resource", func(t *testing.T) {
-				nonExisting := &primitives.Resource{
-					Spec: &primitives.ResourceSpec{
-						Label: "non-existing",
-					},
+				nonExisting := &primitives.ResourceSpec{
+					Label: "non-existing",
 				}
 				nr := append(resources, nonExisting)
 				_, err := testClient.GetResources(ctx, project, nr)
@@ -123,17 +111,15 @@ func TestGetResourceCredentialValues(t *testing.T) {
 	ctx := context.Background()
 
 	t.Run("with an invalid resource", func(t *testing.T) {
-		invalidResource := &primitives.Resource{}
+		invalidResource := &primitives.ResourceSpec{}
 
 		_, err := testClient.GetResourceCredentialValues(ctx, nil, invalidResource)
 		expectErrorEqual(t, err, client.ErrResourceInvalid)
 	})
 
 	t.Run("with a valid resource", func(t *testing.T) {
-		res := &primitives.Resource{
-			Spec: &primitives.ResourceSpec{
-				Label: "custom-resource1",
-			},
+		res := &primitives.ResourceSpec{
+			Label: "custom-resource1",
 		}
 
 		t.Run("with a non-existing project", func(t *testing.T) {
@@ -159,13 +145,11 @@ func TestGetResourceCredentialValues(t *testing.T) {
 			})
 
 			t.Run("with a valid credential subset", func(t *testing.T) {
-				sub := &primitives.Resource{
-					Spec: &primitives.ResourceSpec{
-						Label: "custom-resource1",
-						Credentials: []*primitives.CredentialSpec{
-							{
-								Key: "TOKEN_ID",
-							},
+				sub := &primitives.ResourceSpec{
+					Label: "custom-resource1",
+					Credentials: []*primitives.CredentialSpec{
+						{
+							Key: "TOKEN_ID",
 						},
 					},
 				}
@@ -183,14 +167,12 @@ func TestGetResourceCredentialValues(t *testing.T) {
 
 			t.Run("with a non existing key", func(t *testing.T) {
 				t.Run("with a default value", func(t *testing.T) {
-					sub := &primitives.Resource{
-						Spec: &primitives.ResourceSpec{
-							Label: "custom-resource1",
-							Credentials: []*primitives.CredentialSpec{
-								{
-									Key:     "NON_EXISTING",
-									Default: "my-default-value",
-								},
+					sub := &primitives.ResourceSpec{
+						Label: "custom-resource1",
+						Credentials: []*primitives.CredentialSpec{
+							{
+								Key:     "NON_EXISTING",
+								Default: "my-default-value",
 							},
 						},
 					}
@@ -207,13 +189,11 @@ func TestGetResourceCredentialValues(t *testing.T) {
 				})
 
 				t.Run("without a default value", func(t *testing.T) {
-					sub := &primitives.Resource{
-						Spec: &primitives.ResourceSpec{
-							Label: "custom-resource1",
-							Credentials: []*primitives.CredentialSpec{
-								{
-									Key: "NON_EXISTING",
-								},
+					sub := &primitives.ResourceSpec{
+						Label: "custom-resource1",
+						Credentials: []*primitives.CredentialSpec{
+							{
+								Key: "NON_EXISTING",
 							},
 						},
 					}
@@ -224,13 +204,11 @@ func TestGetResourceCredentialValues(t *testing.T) {
 			})
 
 			t.Run("with an invalid credential subset", func(t *testing.T) {
-				sub := &primitives.Resource{
-					Spec: &primitives.ResourceSpec{
-						Label: "custom-resource1",
-						Credentials: []*primitives.CredentialSpec{
-							{
-								Name: "Invalid",
-							},
+				sub := &primitives.ResourceSpec{
+					Label: "custom-resource1",
+					Credentials: []*primitives.CredentialSpec{
+						{
+							Name: "Invalid",
 						},
 					},
 				}

@@ -43,8 +43,8 @@ func New(cl *manifold.Client, team *string) (*Client, error) {
 
 // GetResource gets a resource for a specific label. If no resource is given,
 // this will error.
-func (c *Client) GetResource(ctx context.Context, project *string, res *primitives.Resource) (*manifold.Resource, error) {
-	rs, err := c.GetResources(ctx, project, []*primitives.Resource{res})
+func (c *Client) GetResource(ctx context.Context, project *string, res *primitives.ResourceSpec) (*manifold.Resource, error) {
+	rs, err := c.GetResources(ctx, project, []*primitives.ResourceSpec{res})
 	if err != nil {
 		return nil, err
 	}
@@ -61,13 +61,13 @@ func (c *Client) GetResource(ctx context.Context, project *string, res *primitiv
 
 // GetResourceCredentialValues is a wrapper function that knows how to get a set
 // of specific credentials for a given requested resource.
-func (c *Client) GetResourceCredentialValues(ctx context.Context, project *string, res *primitives.Resource) ([]*primitives.CredentialValue, error) {
-	resourceCreds, err := c.GetResourcesCredentialValues(ctx, project, []*primitives.Resource{res})
+func (c *Client) GetResourceCredentialValues(ctx context.Context, project *string, res *primitives.ResourceSpec) ([]*primitives.CredentialValue, error) {
+	resourceCreds, err := c.GetResourcesCredentialValues(ctx, project, []*primitives.ResourceSpec{res})
 	if err != nil {
 		return nil, err
 	}
 
-	creds, ok := resourceCreds[res.Spec.Label]
+	creds, ok := resourceCreds[res.Label]
 	if !ok {
 		return nil, ErrResourceNotFound
 	}
@@ -82,7 +82,7 @@ func (c *Client) GetResourceCredentialValues(ctx context.Context, project *strin
 // ResourceCredential with a non existing key but you've provided a Default
 // value, it will be added to the list. If no default value is given, it will
 // error.
-func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *string, res []*primitives.Resource) (map[string][]*primitives.CredentialValue, error) {
+func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *string, res []*primitives.ResourceSpec) (map[string][]*primitives.CredentialValue, error) {
 	for _, r := range res {
 		if !r.Valid() {
 			return nil, ErrResourceInvalid
@@ -146,15 +146,15 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 	return resourceCredentials, nil
 }
 
-func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*primitives.Resource) error {
+func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*primitives.ResourceSpec) error {
 	for _, r := range res {
 		// No credentials specified, skip it
-		if len(r.Spec.Credentials) == 0 {
+		if len(r.Credentials) == 0 {
 			continue
 		}
 
-		rcreds := rc[r.Spec.Label]
-		for _, cred := range r.Spec.Credentials {
+		rcreds := rc[r.Label]
+		for _, cred := range r.Credentials {
 			var set bool
 
 			for _, c := range rcreds {
@@ -180,25 +180,25 @@ func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*
 				}
 			}
 		}
-		rc[r.Spec.Label] = rcreds
+		rc[r.Label] = rcreds
 	}
 
 	return nil
 }
 
-func setCredentialValueFields(cv *primitives.CredentialValue, label string, res []*primitives.Resource) error {
+func setCredentialValueFields(cv *primitives.CredentialValue, label string, res []*primitives.ResourceSpec) error {
 	for _, r := range res {
 		// Not a label for this resource, skip it
-		if label != r.Spec.Label {
+		if label != r.Label {
 			continue
 		}
 
 		// No credentials specified for this resource, skip it
-		if len(r.Spec.Credentials) == 0 {
+		if len(r.Credentials) == 0 {
 			return nil
 		}
 
-		for _, cred := range r.Spec.Credentials {
+		for _, cred := range r.Credentials {
 			if cred.Key == cv.Key {
 				cv.Default = cred.Default
 				cv.Name = cred.Name
@@ -213,7 +213,7 @@ func setCredentialValueFields(cv *primitives.CredentialValue, label string, res 
 // GetResources fetches a set of resources according to their labels. If no
 // resources are given, all the resources will be fetched. If one of the
 // requested resources is not available, this will return an error.
-func (c *Client) GetResources(ctx context.Context, project *string, res []*primitives.Resource) ([]*manifold.Resource, error) {
+func (c *Client) GetResources(ctx context.Context, project *string, res []*primitives.ResourceSpec) ([]*manifold.Resource, error) {
 	for _, r := range res {
 		if !r.Valid() {
 			return nil, ErrResourceInvalid
@@ -325,13 +325,13 @@ func (c *Client) ensureTeamID() error {
 	return ErrTeamNotFound
 }
 
-func requestedResource(res *manifold.Resource, ress []*primitives.Resource) bool {
+func requestedResource(res *manifold.Resource, ress []*primitives.ResourceSpec) bool {
 	if len(ress) == 0 {
 		return true
 	}
 
 	for _, r := range ress {
-		if res.Body.Label == r.Spec.Label {
+		if res.Body.Label == r.Label {
 			return true
 		}
 	}
