@@ -3,7 +3,7 @@ package client
 import (
 	"fmt"
 
-	"github.com/manifoldco/k8s-credentials/primitives"
+	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
 // FlattenResourceCredentialValues will take a set of CredentialValues that are

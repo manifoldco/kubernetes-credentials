@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	manifold "github.com/manifoldco/go-manifold"
-	"github.com/manifoldco/k8s-credentials/primitives"
+	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
 var (

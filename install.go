@@ -6,8 +6,8 @@ import (
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/manifoldco/k8s-credentials/helpers/crd"
-	"github.com/manifoldco/k8s-credentials/primitives"
+	"github.com/manifoldco/kubernetes-credentials/helpers/crd"
+	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
 func main() {
