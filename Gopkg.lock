@@ -135,6 +135,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/hashicorp/golang-lru"
+  packages = [".","simplelru"]
+  revision = "0a025b7e63adc15a622f29b0b2c4c3848243bbf6"
+
+[[projects]]
+  branch = "master"
   name = "github.com/howeyc/gopass"
   packages = ["."]
   revision = "bf9dde6d0d2c004a008c27aaee91170c786f6db8"
@@ -215,19 +221,19 @@
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","http2","http2/hpack","idna","lex/httplex"]
-  revision = "92447d55896d6f92b4a0d4fd83bd078b0374e8fa"
+  revision = "4b14673ba32bee7f5ac0f990a48f033919fd418b"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "a1a1f1746d156bbc9954f29134b20ed4ce2752f1"
+  revision = "f0d39a4bd5f1a0a15ef46503d12cffc780be4b9b"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable","width"]
-  revision = "c01e4764d870b77f8abe5096ee19ad20d80e8075"
+  revision = "6eab0e8f74e86c598ec3b6fad4888e0c11482d48"
 
 [[projects]]
   name = "gopkg.in/inf.v0"
@@ -254,32 +260,38 @@
   revision = "409c3b2393cd3359f275bd8b883b4d9c5aec41f6"
 
 [[projects]]
-  branch = "master"
+  branch = "release-1.8"
   name = "k8s.io/apiextensions-apiserver"
   packages = ["pkg/apis/apiextensions","pkg/apis/apiextensions/v1beta1","pkg/client/clientset/clientset","pkg/client/clientset/clientset/scheme","pkg/client/clientset/clientset/typed/apiextensions/v1beta1"]
-  revision = "83f1a7e2b8384c17fb102b6616e08825ad12992d"
+  revision = "89b2a556a65053a90552eaed26f810df4a266367"
 
 [[projects]]
-  branch = "master"
+  branch = "release-1.8"
   name = "k8s.io/apimachinery"
-  packages = ["pkg/api/equality","pkg/api/errors","pkg/api/meta","pkg/api/resource","pkg/apis/meta/v1","pkg/apis/meta/v1/unstructured","pkg/apis/meta/v1alpha1","pkg/conversion","pkg/conversion/queryparams","pkg/conversion/unstructured","pkg/fields","pkg/labels","pkg/runtime","pkg/runtime/schema","pkg/runtime/serializer","pkg/runtime/serializer/json","pkg/runtime/serializer/protobuf","pkg/runtime/serializer/recognizer","pkg/runtime/serializer/streaming","pkg/runtime/serializer/versioning","pkg/selection","pkg/types","pkg/util/clock","pkg/util/diff","pkg/util/errors","pkg/util/framer","pkg/util/intstr","pkg/util/json","pkg/util/net","pkg/util/runtime","pkg/util/sets","pkg/util/validation","pkg/util/validation/field","pkg/util/wait","pkg/util/yaml","pkg/version","pkg/watch","third_party/forked/golang/reflect"]
-  revision = "e9a29eff7d472df0f7da9ead5ab59b74e74a07ec"
+  packages = ["pkg/api/equality","pkg/api/errors","pkg/api/meta","pkg/api/resource","pkg/apis/meta/internalversion","pkg/apis/meta/v1","pkg/apis/meta/v1/unstructured","pkg/apis/meta/v1alpha1","pkg/conversion","pkg/conversion/queryparams","pkg/conversion/unstructured","pkg/fields","pkg/labels","pkg/runtime","pkg/runtime/schema","pkg/runtime/serializer","pkg/runtime/serializer/json","pkg/runtime/serializer/protobuf","pkg/runtime/serializer/recognizer","pkg/runtime/serializer/streaming","pkg/runtime/serializer/versioning","pkg/selection","pkg/types","pkg/util/cache","pkg/util/clock","pkg/util/diff","pkg/util/errors","pkg/util/framer","pkg/util/intstr","pkg/util/json","pkg/util/net","pkg/util/runtime","pkg/util/sets","pkg/util/validation","pkg/util/validation/field","pkg/util/wait","pkg/util/yaml","pkg/version","pkg/watch","third_party/forked/golang/reflect"]
+  revision = "019ae5ada31de202164b118aee88ee2d14075c31"
 
 [[projects]]
   name = "k8s.io/client-go"
-  packages = ["discovery","kubernetes/scheme","pkg/version","rest","rest/watch","tools/auth","tools/clientcmd","tools/clientcmd/api","tools/clientcmd/api/latest","tools/clientcmd/api/v1","tools/metrics","transport","util/cert","util/flowcontrol","util/homedir","util/integer"]
+  packages = ["discovery","kubernetes/scheme","pkg/version","rest","rest/watch","tools/auth","tools/cache","tools/clientcmd","tools/clientcmd/api","tools/clientcmd/api/latest","tools/clientcmd/api/v1","tools/metrics","tools/pager","transport","util/cert","util/flowcontrol","util/homedir","util/integer"]
   revision = "35874c597fed17ca62cd197e516d7d5ff9a2958c"
   version = "v5.0.0"
 
 [[projects]]
   branch = "master"
+  name = "k8s.io/gengo"
+  packages = ["args","examples/deepcopy-gen/generators","examples/set-gen/sets","generator","namer","parser","types"]
+  revision = "70ad626ed2d7a483d89d2c4c56364d60b48ee8fc"
+
+[[projects]]
+  branch = "master"
   name = "k8s.io/kube-openapi"
   packages = ["pkg/common"]
-  revision = "89ae48fe8691077463af5b7fb3b6f194632c5946"
+  revision = "61b46af70dfed79c6d24530cd23b41440a7f22a5"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "bf5ce982fbaaeefc3943c88717c757731580e05b34bcba77ba1e88a90a5d0103"
+  inputs-digest = "99ffa150e622c11b54707995ffbcf22aefbde15068af503f39934abdab5cc88a"
   solver-name = "gps-cdcl"
   solver-version = 1
