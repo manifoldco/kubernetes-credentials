@@ -71,10 +71,10 @@ func TestGetResources(t *testing.T) {
 
 	t.Run("with valid resources", func(t *testing.T) {
 		resources := []*primitives.ResourceSpec{
-			&primitives.ResourceSpec{
+			{
 				Label: "custom-resource1",
 			},
-			&primitives.ResourceSpec{
+			{
 				Label: "custom-resource2",
 			},
 		}
