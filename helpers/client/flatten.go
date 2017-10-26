@@ -33,7 +33,7 @@ func FlattenResourcesCredentialValues(resourcesCredentials map[string][]*primiti
 			}
 
 			if _, ok := creds[key]; ok {
-				return nil, fmt.Errorf("Key '%s' is already used, please us an alias.", key)
+				return nil, fmt.Errorf("key '%s' is already used, please us an alias", key)
 			}
 
 			value := cred.Value

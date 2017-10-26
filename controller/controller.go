@@ -13,12 +13,15 @@ import (
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
+// Controller is the kubernetes controller that handles syncing Manifold
+// credentials into kubernetes secrets.
 type Controller struct {
 	cClient   *rest.RESTClient
 	mc        *client.Client
 	namespace string
 }
 
+// Run runs this controller
 func (c *Controller) Run(ctx context.Context) error {
 	if err := c.watchProjects(ctx); err != nil {
 		log.Printf("Failed to register project watcher: %s", err)
@@ -63,8 +66,7 @@ func (c *Controller) onProjectAdd(obj interface{}) {
 	project := obj.(*primitives.Project)
 	ctx := context.Background()
 
-	label := primitives.NewLabel(project.Spec.Label)
-	creds, err := c.mc.GetResourcesCredentialValues(ctx, label, project.Spec.Resources)
+	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Label, project.Spec.Resources)
 	if err != nil {
 		log.Printf("Error getting the credentials: %s", err.Error())
 		return

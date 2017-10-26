@@ -251,7 +251,7 @@ func expectErrorEqual(t *testing.T, act, exp error) {
 
 func expectNoError(t *testing.T, err error) {
 	if err != nil {
-		t.Fatalf("Expected no error to have occured, got '%s'", err)
+		t.Fatalf("Expected no error to have occurred, got '%s'", err)
 	}
 }
 

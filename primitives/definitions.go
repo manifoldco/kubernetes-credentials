@@ -1,5 +1,6 @@
 package primitives
 
+// Constants for CRD
 const (
 	CRDGroup   = "manifold.co"
 	CRDVersion = "v1"

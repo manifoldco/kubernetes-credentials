@@ -8,6 +8,7 @@ import (
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
+// The project scheme builder
 var (
 	SchemeBuilder = runtime.NewSchemeBuilder(addKnownTypes)
 	AddToScheme   = SchemeBuilder.AddToScheme

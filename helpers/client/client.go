@@ -9,17 +9,18 @@ import (
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
+// Human friendly error values
 var (
-	ErrLabelRequired          = errors.New("A label is required to perform this query.")
-	ErrResourceInvalid        = errors.New("The resource is invalid")
-	ErrMultipleResourcesFound = errors.New("Multiple resources with the same label are found. Please provide a specific project.")
+	ErrLabelRequired          = errors.New("a label is required to perform this query")
+	ErrResourceInvalid        = errors.New("the resource is invalid")
+	ErrMultipleResourcesFound = errors.New("multiple resources with the same label are found. Please provide a specific project")
 
-	ErrTeamNotFound            = errors.New("Team not found.")
-	ErrResourceNotFound        = errors.New("A resource with the given label is not found.")
-	ErrProjectNotFound         = errors.New("Project with the given label is not  found.")
-	ErrCredentialNotFound      = errors.New("Credential with the given KEY is not found.")
-	ErrCredentialNotSpecified  = errors.New("We've found a credential that you did not specify.")
-	ErrCredentialDefaultNotSet = errors.New("You did not provide a default for a the non-existing credential.")
+	ErrTeamNotFound            = errors.New("team not found")
+	ErrResourceNotFound        = errors.New("a resource with the given label is not found")
+	ErrProjectNotFound         = errors.New("project with the given label is not  found")
+	ErrCredentialNotFound      = errors.New("credential with the given KEY is not found")
+	ErrCredentialNotSpecified  = errors.New("we've found a credential that you did not specify")
+	ErrCredentialDefaultNotSet = errors.New("uou did not provide a default for a the non-existing credential")
 )
 
 // Client is a wrapper around the manifold client.
@@ -31,7 +32,8 @@ type Client struct {
 	projectIDs map[string]*manifold.ID
 }
 
-// NewWithClient returns a new wrapper client with a Manifold client in it.
+// New returns a new wrapper client for the provided client, bound to the
+// provided team.
 func New(cl *manifold.Client, team *string) (*Client, error) {
 	c := &Client{
 		cl:         cl,
@@ -167,17 +169,17 @@ func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*
 			if !set {
 				if cred.Default == "" {
 					return ErrCredentialDefaultNotSet
-				} else {
-					cv := &primitives.CredentialValue{
-						CredentialSpec: primitives.CredentialSpec{
-							Key:  cred.Key,
-							Name: cred.Name,
-						},
-						Value: cred.Default,
-					}
-
-					rcreds = append(rcreds, cv)
 				}
+
+				cv := &primitives.CredentialValue{
+					CredentialSpec: primitives.CredentialSpec{
+						Key:  cred.Key,
+						Name: cred.Name,
+					},
+					Value: cred.Default,
+				}
+
+				rcreds = append(rcreds, cv)
 			}
 		}
 		rc[r.Label] = rcreds

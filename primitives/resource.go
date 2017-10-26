@@ -33,7 +33,7 @@ type ResourceList struct {
 	Items           []*Resource `json:"items"`
 }
 
-// Spec is the specification that is required to build a valid Resource
+// ResourceSpec is the specification that is required to build a valid Resource
 // manifest.
 type ResourceSpec struct {
 	Label       string            `json:"resource,label"`
