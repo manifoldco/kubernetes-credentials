@@ -7,15 +7,18 @@ import (
 	"os/signal"
 	"syscall"
 
+	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 
-	manifold "github.com/manifoldco/go-manifold"
+	"github.com/manifoldco/go-manifold"
 	"github.com/manifoldco/kubernetes-credentials/crd"
 	"github.com/manifoldco/kubernetes-credentials/crd/projects"
 	"github.com/manifoldco/kubernetes-credentials/crd/resources"
 	"github.com/manifoldco/kubernetes-credentials/helpers/client"
+	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
 func main() {
@@ -29,7 +32,24 @@ func main() {
 		log.Fatal(err)
 	}
 
-	restClient, _, err := newClient(cfg)
+	kc, err := kubernetes.NewForConfig(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	cs, err := clientset.NewForConfig(cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if err := crd.CreateCRD(cs, primitives.CRDProjectsName, primitives.CRDProjectsPlural, primitives.CRDGroup, primitives.CRDVersion); err != nil {
+		log.Fatal(err)
+	}
+	if err := crd.CreateCRD(cs, primitives.CRDResourcesName, primitives.CRDResourcesPlural, primitives.CRDGroup, primitives.CRDVersion); err != nil {
+		log.Fatal(err)
+	}
+
+	rc, err := newClient(cfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,8 +65,9 @@ func main() {
 	}
 
 	ctrl := &Controller{
-		mc:      wrapper,
-		cClient: restClient,
+		kc: kc,
+		rc: rc,
+		mc: wrapper,
 	}
 	go ctrl.Run(ctx)
 
@@ -56,15 +77,15 @@ func main() {
 	log.Printf("Shutting down...")
 }
 
-func newClient(cfg *rest.Config) (*rest.RESTClient, *runtime.Scheme, error) {
+func newClient(cfg *rest.Config) (*rest.RESTClient, error) {
 	scheme := runtime.NewScheme()
 
 	if err := projects.AddToScheme(scheme); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	if err := resources.AddToScheme(scheme); err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 
 	config := *cfg
@@ -73,10 +94,5 @@ func newClient(cfg *rest.Config) (*rest.RESTClient, *runtime.Scheme, error) {
 	config.ContentType = runtime.ContentTypeJSON
 	config.NegotiatedSerializer = serializer.DirectCodecFactory{CodecFactory: serializer.NewCodecFactory(scheme)}
 
-	client, err := rest.RESTClientFor(&config)
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return client, scheme, nil
+	return rest.RESTClientFor(&config)
 }

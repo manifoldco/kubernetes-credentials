@@ -17,7 +17,7 @@ var (
 
 	ErrTeamNotFound            = errors.New("team not found")
 	ErrResourceNotFound        = errors.New("a resource with the given label is not found")
-	ErrProjectNotFound         = errors.New("project with the given label is not  found")
+	ErrProjectNotFound         = errors.New("project with the given label is not found")
 	ErrCredentialNotFound      = errors.New("credential with the given KEY is not found")
 	ErrCredentialNotSpecified  = errors.New("we've found a credential that you did not specify")
 	ErrCredentialDefaultNotSet = errors.New("you did not provide a default for a the non-existing credential")
@@ -189,6 +189,10 @@ func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*
 }
 
 func setCredentialValueFields(cv *primitives.CredentialValue, label string, res []*primitives.ResourceSpec) error {
+	if len(res) == 0 {
+		return nil
+	}
+
 	for _, r := range res {
 		// Not a label for this resource, skip it
 		if label != r.Label {
@@ -245,7 +249,7 @@ func (c *Client) GetResources(ctx context.Context, project *string, res []*primi
 		}
 	}
 
-	if len(resources) != len(res) {
+	if len(resources) != len(res) && len(res) != 0 {
 		return nil, ErrResourceNotFound
 	}
 
