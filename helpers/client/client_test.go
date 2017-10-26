@@ -33,7 +33,7 @@ func TestGetResource(t *testing.T) {
 		})
 
 		t.Run("with an existing project", func(t *testing.T) {
-			project := strPtr("manifold-terraform")
+			project := strPtr("kubernetes-secrets")
 
 			t.Run("with an existing resource", func(t *testing.T) {
 				resource := &primitives.ResourceSpec{
@@ -85,7 +85,7 @@ func TestGetResources(t *testing.T) {
 		})
 
 		t.Run("with an existing project", func(t *testing.T) {
-			project := strPtr("manifold-terraform")
+			project := strPtr("kubernetes-secrets")
 
 			t.Run("with one non-existing resource", func(t *testing.T) {
 				nonExisting := &primitives.ResourceSpec{
@@ -128,7 +128,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 		})
 
 		t.Run("with an existing project", func(t *testing.T) {
-			project := strPtr("manifold-terraform")
+			project := strPtr("kubernetes-secrets")
 
 			t.Run("without credentials subset", func(t *testing.T) {
 				creds, err := testClient.GetResourceCredentialValues(ctx, project, res)

@@ -20,7 +20,7 @@ var (
 	ErrProjectNotFound         = errors.New("project with the given label is not  found")
 	ErrCredentialNotFound      = errors.New("credential with the given KEY is not found")
 	ErrCredentialNotSpecified  = errors.New("we've found a credential that you did not specify")
-	ErrCredentialDefaultNotSet = errors.New("uou did not provide a default for a the non-existing credential")
+	ErrCredentialDefaultNotSet = errors.New("you did not provide a default for a the non-existing credential")
 )
 
 // Client is a wrapper around the manifold client.
