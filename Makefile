@@ -16,9 +16,8 @@ ci: $(LINTERS) test
 #################################################
 
 BOOTSTRAP=\
-github.com/golang/dep/cmd/dep \
+	github.com/golang/dep/cmd/dep \
 	github.com/alecthomas/gometalinter \
-	k8s.io/kubernetes/hack/boilerplate \
 	github.com/kubernetes/code-generator/cmd/deepcopy-gen
 
 $(BOOTSTRAP):
