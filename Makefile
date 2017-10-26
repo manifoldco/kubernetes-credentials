@@ -56,7 +56,7 @@ docker: bin/controller
 test: vendor
 	@CGO_ENABLED=0 go test -v ./...
 
-METALINT=gometalinter --tests --disable-all --vendor --deadline=5m -s data \
+METALINT=gometalinter --tests --disable-all --vendor --deadline=5m -e "zz_.*\.go" \
 	 ./... --enable
 
 $(LINTERS): vendor
