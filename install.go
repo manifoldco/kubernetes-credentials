@@ -6,7 +6,7 @@ import (
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/client-go/tools/clientcmd"
 
-	"github.com/manifoldco/kubernetes-credentials/helpers/crd"
+	"github.com/manifoldco/kubernetes-credentials/crd"
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
