@@ -1,11 +1,11 @@
 LINTERS=\
-    gofmt \
-    golint \
-    gosimple \
-    vet \
-    misspell \
-    ineffassign \
-    deadcode
+	gofmt \
+	golint \
+	gosimple \
+	vet \
+	misspell \
+	ineffassign \
+	deadcode
 
 ci: $(LINTERS) test
 
@@ -16,8 +16,8 @@ ci: $(LINTERS) test
 #################################################
 
 BOOTSTRAP=\
-    github.com/golang/dep/cmd/dep \
-    github.com/alecthomas/gometalinter \
+github.com/golang/dep/cmd/dep \
+	github.com/alecthomas/gometalinter \
 	k8s.io/kubernetes/hack/boilerplate \
 	github.com/kubernetes/code-generator/cmd/deepcopy-gen
 
@@ -27,7 +27,7 @@ bootstrap: $(BOOTSTRAP)
 	gometalinter --install
 
 vendor: Gopkg.lock
-	dep ensure
+	dep ensure -vendor-only
 
 install: vendor
 	go run *.go -kubeconfig=$(HOME)/.kube/config
@@ -38,10 +38,10 @@ install: vendor
 # Building
 #################################################
 
-generated: primitives/zz_generated.go
+primitives/zz_generated.go: $(wildcard primitives,*.go)
 	deepcopy-gen -v=5 -i github.com/manifoldco/kubernetes-credentials/primitives -O zz_generated
 
-bin/controller: vendor generated
+bin/controller: vendor primitives/zz_generated.go
 	CGO_ENABLED=0 GOOS=linux go build -a -o bin/controller ./controller
 
 docker: bin/controller
@@ -57,7 +57,7 @@ test: vendor
 	@CGO_ENABLED=0 go test -v ./...
 
 METALINT=gometalinter --tests --disable-all --vendor --deadline=5m -s data \
-     ./... --enable
+	 ./... --enable
 
 $(LINTERS): vendor
 	$(METALINT) $@
