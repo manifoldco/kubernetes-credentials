@@ -85,7 +85,7 @@ $ manifold tokens create
 Once you have the token, you'll want to create a new Kubernetes Secret:
 
 ```
-$ kubectl create secret generic manifold-secrets --from-literal=auth_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
+$ kubectl create secret generic manifold-secrets --from-literal=api_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
 ```
 
 **Note:** The team value is optional. If a team is provided in the controller

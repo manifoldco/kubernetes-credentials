@@ -1,3 +1,19 @@
 [[constraint]]
-  branch = "master"
   name = "k8s.io/apiextensions-apiserver"
+  version = "kubernetes-1.8.1"
+
+[[constraint]]
+  name = "k8s.io/api"
+  version = "kubernetes-1.8.1"
+
+[[constraint]]
+  name = "k8s.io/apimachinery"
+  version = "kubernetes-1.8.1"
+
+[[constraint]]
+  name = "k8s.io/client-go"
+  version = "v5.0.0"
+
+[[constraint]]
+  name = "github.com/manifoldco/go-manifold"
+  version = "0.8.3"

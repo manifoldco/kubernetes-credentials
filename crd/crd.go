@@ -7,13 +7,22 @@ import (
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
+
+	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
+
+// SchemeGroupVersion is the group version used to register these objects.
+var SchemeGroupVersion = schema.GroupVersion{
+	Group:   primitives.CRDGroup,
+	Version: primitives.CRDVersion,
+}
 
 // CreateCRD is a wrapper to create a CRD from scratch with a set of params.
 func CreateCRD(cs apiextensionsclient.Interface, name, plural, group, version string) error {
-	fullName := plural + "." + version
+	fullName := plural + "." + group
 
 	crd := &apiextv1beta1.CustomResourceDefinition{
 		ObjectMeta: metav1.ObjectMeta{
