@@ -79,19 +79,6 @@ credentials as secrets. We've [provided an example manifest file](_examples/secr
 
 ## Installation
 
-You install the Custom Resource Definition and Controller in three steps.
-
-### Define the CRD in your cluster
-
-To install this Custom Resource into your cluster, make sure that you have
-access to your cluster through `kubectl`. Double check that you're connected to
-the correct cluster by running `kubectl cluster-info`. You can then run the
-following command to install the custom resource:
-
-```
-$ go run install.go -kubeconf=$HOME/.kube/config
-```
-
 ### Setting up the Manifold Auth Token to retrieve the credentials
 
 First, you'll need to create a new Auth Token:
@@ -112,12 +99,12 @@ to load the credentials. If no team is defined, this is ignored.
 
 ### Setting up the controller
 
-The last thing you'll need to do is set up the controller. The controller takes
-care of monitoring your Resource Definitions and populating the correct
-Kubernetes Secrets with Manifold Credentials. Without it, nothing will happen.
+Next, you'll need to set up the controller. The controller takes care of
+monitoring your Resource Definitions and populating the correct Kubernetes
+Secrets with Manifold Credentials. Without it, nothing will happen.
 
 ```
-$ kubectl create -f credentials-controller.yml
+$ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-credentials/master/credentials-controller.yml
 ```
 
 **Note:** You can customise this credentials-controller file. This is a general
