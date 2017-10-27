@@ -9,6 +9,8 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/manifoldco/kubernetes-credentials)](https://goreportcard.com/report/github.com/manifoldco/kubernetes-credentials)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](./LICENSE)
 
+![Kubernetes Manifold](./banner.png)
+
 Manifold gives you a single account to purchase and manage cloud services from
 multiple providers, giving you managed logging, email, MySQL, Postgres,
 Memcache, Redis, and more. Manifold also lets you register configurations for
