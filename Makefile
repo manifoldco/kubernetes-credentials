@@ -28,9 +28,6 @@ bootstrap: $(BOOTSTRAP)
 vendor: Gopkg.lock
 	dep ensure -vendor-only
 
-install: vendor
-	go run *.go -kubeconfig=$(HOME)/.kube/config
-
 .PHONY: bootstrap $(BOOTSTRAP)
 
 #################################################
@@ -41,7 +38,7 @@ primitives/zz_generated.go: $(wildcard primitives,*.go)
 	deepcopy-gen -v=5 -i github.com/manifoldco/kubernetes-credentials/primitives -O zz_generated
 
 bin/controller: vendor primitives/zz_generated.go
-	CGO_ENABLED=0 GOOS=linux go build -a -o bin/controller ./controller
+	CGO_ENABLED=0 GOOS=linux go build -a -o bin/controller .
 
 docker: bin/controller
 	docker build -f Dockerfile.dev -t manifoldco/kubernetes-credentials-controller .

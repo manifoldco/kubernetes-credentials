@@ -14,6 +14,8 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/manifoldco/go-manifold"
+
+	"github.com/manifoldco/kubernetes-credentials/controller"
 	"github.com/manifoldco/kubernetes-credentials/crd"
 	"github.com/manifoldco/kubernetes-credentials/crd/projects"
 	"github.com/manifoldco/kubernetes-credentials/crd/resources"
@@ -64,11 +66,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ctrl := &Controller{
-		kc: kc,
-		rc: rc,
-		mc: wrapper,
-	}
+	ctrl := controller.New(kc, rc, wrapper)
 	go ctrl.Run(ctx)
 
 	quit := make(chan os.Signal, 1)

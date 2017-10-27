@@ -1,4 +1,4 @@
-package main
+package controller
 
 import (
 	"context"
@@ -32,6 +32,11 @@ type Controller struct {
 	rc        *rest.RESTClient
 	mc        *client.Client
 	namespace string
+}
+
+// New returns a new controller
+func New(kc *kubernetes.Clientset, rc *rest.RESTClient, mc *client.Client) *Controller {
+	return &Controller{kc: kc, rc: rc, mc: mc}
 }
 
 // Run runs this controller
