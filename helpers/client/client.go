@@ -11,7 +11,7 @@ import (
 
 // Human friendly error values
 var (
-	ErrLabelRequired          = errors.New("a label is required to perform this query")
+	ErrNameRequired           = errors.New("a label is required to perform this query")
 	ErrResourceInvalid        = errors.New("the resource is invalid")
 	ErrMultipleResourcesFound = errors.New("multiple resources with the same label are found. Please provide a specific project")
 
@@ -52,7 +52,7 @@ func (c *Client) GetResource(ctx context.Context, project *string, res *primitiv
 	}
 
 	if len(rs) > 1 {
-		// Labels are unique per project. If no project is specified it could be
+		// Names are unique per project. If no project is specified it could be
 		// that there are multiple resources.
 		// TODO: figure out if we can setup a test for this.
 		return nil, ErrMultipleResourcesFound
@@ -69,7 +69,7 @@ func (c *Client) GetResourceCredentialValues(ctx context.Context, project *strin
 		return nil, err
 	}
 
-	creds, ok := resourceCreds[res.Label]
+	creds, ok := resourceCreds[res.Name]
 	if !ok {
 		return nil, ErrResourceNotFound
 	}
@@ -79,7 +79,7 @@ func (c *Client) GetResourceCredentialValues(ctx context.Context, project *strin
 
 // GetResourcesCredentialValues is a wrapper function that gets a list of
 // CredentialValues for a list of resources and then maps all the credentials to
-// it's specific Resource using the Resource Label.
+// it's specific Resource using the Resource Name.
 // This also takes care of filling up the gaps. If you have requested a
 // ResourceCredential with a non existing key but you've provided a Default
 // value, it will be added to the list. If no default value is given, it will
@@ -97,10 +97,10 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 	}
 
 	resourceIDs := make([]manifold.ID, len(resources))
-	resourceLabels := map[manifold.ID]string{}
+	resourceNames := map[manifold.ID]string{}
 	for i, res := range resources {
 		resourceIDs[i] = res.ID
-		resourceLabels[res.ID] = res.Body.Label
+		resourceNames[res.ID] = res.Body.Label
 	}
 
 	credList := c.cl.Credentials.List(ctx, resourceIDs)
@@ -113,7 +113,7 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 			return nil, err
 		}
 
-		resourceCreds, ok := resourceCredentials[resourceLabels[cred.Body.ResourceID]]
+		resourceCreds, ok := resourceCredentials[resourceNames[cred.Body.ResourceID]]
 		if !ok {
 			resourceCreds = []*primitives.CredentialValue{}
 		}
@@ -126,7 +126,7 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 				Value: v,
 			}
 
-			err := setCredentialValueFields(cv, resourceLabels[cred.Body.ResourceID], res)
+			err := setCredentialValueFields(cv, resourceNames[cred.Body.ResourceID], res)
 			switch err {
 			case nil:
 				resourceCreds = append(resourceCreds, cv)
@@ -138,7 +138,7 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 			}
 		}
 
-		resourceCredentials[resourceLabels[cred.Body.ResourceID]] = resourceCreds
+		resourceCredentials[resourceNames[cred.Body.ResourceID]] = resourceCreds
 	}
 
 	if err := fillDefaultCredentials(resourceCredentials, res); err != nil {
@@ -155,7 +155,7 @@ func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*
 			continue
 		}
 
-		rcreds := rc[r.Label]
+		rcreds := rc[r.Name]
 		for _, cred := range r.Credentials {
 			var set bool
 
@@ -182,7 +182,7 @@ func fillDefaultCredentials(rc map[string][]*primitives.CredentialValue, res []*
 				rcreds = append(rcreds, cv)
 			}
 		}
-		rc[r.Label] = rcreds
+		rc[r.Name] = rcreds
 	}
 
 	return nil
@@ -195,7 +195,7 @@ func setCredentialValueFields(cv *primitives.CredentialValue, label string, res 
 
 	for _, r := range res {
 		// Not a label for this resource, skip it
-		if label != r.Label {
+		if label != r.Name {
 			continue
 		}
 
@@ -337,7 +337,7 @@ func requestedResource(res *manifold.Resource, ress []*primitives.ResourceSpec) 
 	}
 
 	for _, r := range ress {
-		if res.Body.Label == r.Label {
+		if res.Body.Label == r.Name {
 			return true
 		}
 	}

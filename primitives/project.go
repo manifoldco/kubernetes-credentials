@@ -36,15 +36,15 @@ type ProjectList struct {
 // ProjectSpec is the specification that is required to build a valid Project
 // manifest.
 type ProjectSpec struct {
-	Label     string          `json:"project,label"`
+	Name      string          `json:"project,name"`
 	Team      string          `json:"team,omitempty"`
 	Resources []*ResourceSpec `json:"resources,omitempty"`
 }
 
 // Valid will validate the ProjectSpec.
 func (p *ProjectSpec) Valid() bool {
-	if p.Label == "" {
-		fmt.Println("no project spec label")
+	if p.Name == "" {
+		fmt.Println("no project spec name")
 		return false
 	}
 

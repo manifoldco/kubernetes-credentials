@@ -36,14 +36,14 @@ type ResourceList struct {
 // ResourceSpec is the specification that is required to build a valid Resource
 // manifest.
 type ResourceSpec struct {
-	Label       string            `json:"resource,label"`
+	Name        string            `json:"resource,name"`
 	Team        string            `json:"team,omitempty"`
 	Credentials []*CredentialSpec `json:"credentials,omitempty"`
 }
 
 // Valid will validate the ResourceSpec.
 func (r *ResourceSpec) Valid() bool {
-	if r.Label == "" {
+	if r.Name == "" {
 		fmt.Println("no resource spec label")
 		return false
 	}
