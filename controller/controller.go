@@ -2,21 +2,31 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
+	"time"
 
+	"k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 
+	"github.com/manifoldco/kubernetes-credentials/crd"
 	"github.com/manifoldco/kubernetes-credentials/helpers/client"
 	"github.com/manifoldco/kubernetes-credentials/primitives"
+)
+
+var (
+	projectControllerKind = crd.SchemeGroupVersion.WithKind("Project")
 )
 
 // Controller is the kubernetes controller that handles syncing Manifold
 // credentials into kubernetes secrets.
 type Controller struct {
-	cClient   *rest.RESTClient
+	kc        *kubernetes.Clientset
+	rc        *rest.RESTClient
 	mc        *client.Client
 	namespace string
 }
@@ -33,7 +43,7 @@ func (c *Controller) Run(ctx context.Context) error {
 
 func (c *Controller) watchProjects(ctx context.Context) error {
 	source := cache.NewListWatchFromClient(
-		c.cClient,
+		c.rc,
 		primitives.CRDProjectsPlural,
 		c.namespace,
 		fields.Everything(),
@@ -48,7 +58,7 @@ func (c *Controller) watchProjects(ctx context.Context) error {
 		// resyncPeriod
 		// Every resyncPeriod, all resources in the cache will retrigger events.
 		// Set to 0 to disable the resync.
-		0,
+		10*time.Second,
 
 		// Your custom resource event handlers.
 		cache.ResourceEventHandlerFuncs{
@@ -62,24 +72,58 @@ func (c *Controller) watchProjects(ctx context.Context) error {
 	return nil
 }
 
-func (c *Controller) onProjectAdd(obj interface{}) {
+func (c *Controller) onProjectAdd(obj interface{}) { c.createOrUpdateSecret(obj) }
+
+func (c *Controller) onProjectUpdate(old, new interface{}) {
+	c.createOrUpdateSecret(new)
+}
+
+func (c *Controller) onProjectDelete(obj interface{}) {
+	log.Printf("Received a delete for a project crd")
+
+	project := obj.(*primitives.Project)
+	c.kc.Core().Secrets(project.Namespace).Delete(project.Name+"-credentials", &metav1.DeleteOptions{})
+}
+
+func (c *Controller) createOrUpdateSecret(obj interface{}) {
 	project := obj.(*primitives.Project)
 	ctx := context.Background()
 
 	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Label, project.Spec.Resources)
 	if err != nil {
-		log.Printf("Error getting the credentials: %s", err.Error())
+		log.Print("Error getting the credentials:", err)
 		return
 	}
 
-	fmt.Println("Received a new resource!")
-	fmt.Println(client.FlattenResourcesCredentialValues(creds))
-}
+	cmap, err := client.FlattenResourcesCredentialValues(creds)
+	if err != nil {
+		log.Print("Error flattening credentials:", err)
+		return
+	}
 
-func (c *Controller) onProjectUpdate(old, new interface{}) {
-	log.Printf("Received an update for a CRD!")
-}
+	secretData := make(map[string][]byte)
+	for k, v := range cmap {
+		secretData[k] = []byte(v)
+	}
 
-func (c *Controller) onProjectDelete(obj interface{}) {
-	log.Printf("Received a delete for a CRD!")
+	secret := v1.Secret{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      project.Name + "-credentials",
+			Namespace: project.Namespace,
+			OwnerReferences: []metav1.OwnerReference{
+				*metav1.NewControllerRef(project, projectControllerKind),
+			},
+		},
+		Data: secretData,
+	}
+
+	s := c.kc.Core().Secrets(project.Namespace)
+	_, err = s.Update(&secret)
+	if apierrors.IsNotFound(err) {
+		_, err = s.Create(&secret)
+	}
+
+	if err != nil {
+		log.Print("Error syncing secret:", err)
+	}
 }

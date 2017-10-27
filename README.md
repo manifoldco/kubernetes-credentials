@@ -15,10 +15,11 @@ secrets so you can use them as such in your deployments.
 
 ## Usage
 
-We've utilised [Kubernetes' CRD](https://kubernetes.io/docs/concepts/api-extension/custom-resources/) implementation to allow you to define fine
-grained control over your credentials. As with our [Terraform provider](https://github.com/manifoldco/terraform-provider-manifold/), we
-allow you to filter out projects, resources and specific credentials you want to
-load.
+We've utilised [Kubernetes' CRD](https://kubernetes.io/docs/concepts/api-extension/custom-resources/)
+implementation to allow you to define fine grained control over your
+credentials. As with our [Terraform provider](https://github.com/manifoldco/terraform-provider-manifold/),
+we allow you to filter out projects, resources and specific credentials you want
+to load.
 
 ### Defining credentials
 

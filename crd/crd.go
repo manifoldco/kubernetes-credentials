@@ -6,6 +6,7 @@ import (
 
 	apiextv1beta1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/errors"
@@ -38,8 +39,11 @@ func CreateCRD(cs apiextensionsclient.Interface, name, plural, group, version st
 			},
 		},
 	}
+
 	_, err := cs.ApiextensionsV1beta1().CustomResourceDefinitions().Create(crd)
-	if err != nil {
+	if apierrors.IsAlreadyExists(err) {
+		return nil
+	} else if err != nil {
 		return err
 	}
 
