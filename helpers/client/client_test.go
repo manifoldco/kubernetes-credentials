@@ -25,7 +25,7 @@ func TestGetResource(t *testing.T) {
 	t.Run("with a valid resource", func(t *testing.T) {
 		t.Run("with a non-existing project", func(t *testing.T) {
 			resource := &primitives.ResourceSpec{
-				Label: "custom-resource1",
+				Name: "custom-resource1",
 			}
 
 			_, err := testClient.GetResource(ctx, strPtr("non-existing"), resource)
@@ -37,7 +37,7 @@ func TestGetResource(t *testing.T) {
 
 			t.Run("with an existing resource", func(t *testing.T) {
 				resource := &primitives.ResourceSpec{
-					Label: "custom-resource1",
+					Name: "custom-resource1",
 				}
 
 				res, err := testClient.GetResource(ctx, project, resource)
@@ -49,7 +49,7 @@ func TestGetResource(t *testing.T) {
 
 			t.Run("with a non existing resource", func(t *testing.T) {
 				resource := &primitives.ResourceSpec{
-					Label: "non-existing-resource",
+					Name: "non-existing-resource",
 				}
 
 				_, err := testClient.GetResource(ctx, project, resource)
@@ -72,10 +72,10 @@ func TestGetResources(t *testing.T) {
 	t.Run("with valid resources", func(t *testing.T) {
 		resources := []*primitives.ResourceSpec{
 			{
-				Label: "custom-resource1",
+				Name: "custom-resource1",
 			},
 			{
-				Label: "custom-resource2",
+				Name: "custom-resource2",
 			},
 		}
 
@@ -89,7 +89,7 @@ func TestGetResources(t *testing.T) {
 
 			t.Run("with one non-existing resource", func(t *testing.T) {
 				nonExisting := &primitives.ResourceSpec{
-					Label: "non-existing",
+					Name: "non-existing",
 				}
 				nr := append(resources, nonExisting)
 				_, err := testClient.GetResources(ctx, project, nr)
@@ -119,7 +119,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 
 	t.Run("with a valid resource", func(t *testing.T) {
 		res := &primitives.ResourceSpec{
-			Label: "custom-resource1",
+			Name: "custom-resource1",
 		}
 
 		t.Run("with a non-existing project", func(t *testing.T) {
@@ -146,7 +146,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 
 			t.Run("with a valid credential subset", func(t *testing.T) {
 				sub := &primitives.ResourceSpec{
-					Label: "custom-resource1",
+					Name: "custom-resource1",
 					Credentials: []*primitives.CredentialSpec{
 						{
 							Key: "TOKEN_ID",
@@ -168,7 +168,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 			t.Run("with a non existing key", func(t *testing.T) {
 				t.Run("with a default value", func(t *testing.T) {
 					sub := &primitives.ResourceSpec{
-						Label: "custom-resource1",
+						Name: "custom-resource1",
 						Credentials: []*primitives.CredentialSpec{
 							{
 								Key:     "NON_EXISTING",
@@ -190,7 +190,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 
 				t.Run("without a default value", func(t *testing.T) {
 					sub := &primitives.ResourceSpec{
-						Label: "custom-resource1",
+						Name: "custom-resource1",
 						Credentials: []*primitives.CredentialSpec{
 							{
 								Key: "NON_EXISTING",
@@ -205,7 +205,7 @@ func TestGetResourceCredentialValues(t *testing.T) {
 
 			t.Run("with an invalid credential subset", func(t *testing.T) {
 				sub := &primitives.ResourceSpec{
-					Label: "custom-resource1",
+					Name: "custom-resource1",
 					Credentials: []*primitives.CredentialSpec{
 						{
 							Name: "Invalid",
