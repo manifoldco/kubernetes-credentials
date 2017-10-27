@@ -9,6 +9,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/manifoldco/kubernetes-credentials)](https://goreportcard.com/report/github.com/manifoldco/kubernetes-credentials)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](./LICENSE)
 
+Manifold gives you a single account to purchase and manage cloud services from
+multiple providers, giving you managed logging, email, MySQL, Postgres,
+Memcache, Redis, and more. Manifold also lets you register configurations for
+your services external to Manifold's marketplace, giving you a single location
+to organize and manage the credentials for your environments.
+
 This package allows you to load [Manifold](https://www.manifold.co/) credentials
 into your Kubernetes cluster. These credentials will be stored as a Kubernetes
 secrets so you can use them as such in your deployments.
@@ -21,18 +27,28 @@ credentials. As with our [Terraform provider](https://github.com/manifoldco/terr
 we allow you to filter out projects, resources and specific credentials you want
 to load.
 
+### Getting started
+
+To use this, you'll need [an account with
+Manifold]((https://dashboard.manifold.co/register)) and some configuration
+stored there. You can provision free or paid plans, or insert and manage your
+own configuration values.
+
+You'll also want to [install the Manifold CLI](https://www.manifold.co/cli)
+so that you can generate auth tokens.
+
 ### Defining credentials
 
 Defining credentials happens through our Custom Resource Definition. We have
-2 ways of defining how you would like to get credentials.
+two ways of defining how you would like to get credentials.
 
 **Note:** Currently, Kubernetes does not provide a way to validate CRDs. Because
-of this, we advice you to double check your definitions and monitor the output
+of this, we advise you to double check your definitions and monitor the output
 of the controller if you experience issues. Adding validation
 [is a work in progress](https://github.com/kubernetes/community/pull/708). Once
 this is added to the Kubernetes core, we'll look at providing this as well.
 
-**Note:** The minimum requirement to define a specific credential is it's key.
+**Note:** The minimum requirement to define a specific credential is its key.
 If you provide a name, this name will be used as a key reference in the k8s
 secret. A default value can also be provided. If a default value is provided for
 a key that does not exist in the Manifold credentials list, this default value
@@ -40,8 +56,8 @@ will be used to populate the credential.
 
 #### Project
 
-You can load multiple credentials in one go for a specific project, you can do
-this [as described in this manifest file](_examples/project/manifest.yml).
+You can load multiple credentials at once for a specific project, [as described
+in this manifest file](_examples/project/manifest.yml).
 
 #### Resource
 
@@ -61,8 +77,7 @@ credentials as secrets. We've [provided an example manifest file](_examples/secr
 
 ## Installation
 
-Installing the Custom Resource Definition and Controller exists out of a few
-steps which are listed below.
+You install the Custom Resource Definition and Controller in three steps.
 
 ### Define the CRD in your cluster
 
