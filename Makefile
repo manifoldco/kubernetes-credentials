@@ -44,7 +44,7 @@ bin/controller: vendor primitives/zz_generated.go
 	CGO_ENABLED=0 GOOS=linux go build -a -o bin/controller ./controller
 
 docker: bin/controller
-	docker build -t manifoldco/kubernetes-credentials-controller .
+	docker build -f Dockerfile.dev -t manifoldco/kubernetes-credentials-controller .
 
 .PHONY: generated
 
