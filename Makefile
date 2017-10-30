@@ -75,7 +75,8 @@ ifndef VERSION
 	$(error You need to specify the version you want to tag)
 endif
 	sed -i -e 's|Version = ".*"|Version = "$(VERSION)"|' version.go
-	git add version.go
+	sed -i -e 's|kubernetes-credentials:v.*|kubernetes-credentials:v$(VERSION)|' credentials-controller.yml
+	git add version.go credentials-controller.yml
 	git commit -m "Tagging v$(VERSION)"
 	git tag v$(VERSION)
 	git push
