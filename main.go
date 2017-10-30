@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -60,7 +61,10 @@ func main() {
 		return &str
 	}
 
-	manifoldClient := manifold.New(manifold.WithAPIToken(os.Getenv("MANIFOLD_API_TOKEN")))
+	manifoldClient := manifold.New(
+		manifold.WithAPIToken(os.Getenv("MANIFOLD_API_TOKEN")),
+		manifold.WithUserAgent(fmt.Sprintf("kubernetes-%s", Version)),
+	)
 	wrapper, err := client.New(manifoldClient, ptr(os.Getenv("MANIFOLD_TEAM")))
 	if err != nil {
 		log.Fatal(err)
