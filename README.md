@@ -5,7 +5,7 @@
 [Code of Conduct](./.github/CODE_OF_CONDUCT.md) |
 [Contribution Guidelines](./.github/CONTRIBUTING.md)
 
-[![Build Status](https://travis-ci.com/manifoldco/kubernetes-credentials.svg?token=SbTMbCYMT5HWVmmTnBoj&branch=master)](https://travis-ci.com/manifoldco/kubernetes-credentials)
+[![Build Status](https://travis-ci.org/manifoldco/kubernetes-credentials.svg?branch=master)](https://travis-ci.org/manifoldco/kubernetes-credentials)
 [![Go Report Card](https://goreportcard.com/badge/github.com/manifoldco/kubernetes-credentials)](https://goreportcard.com/report/github.com/manifoldco/kubernetes-credentials)
 [![License](https://img.shields.io/badge/license-BSD-blue.svg)](./LICENSE)
 
