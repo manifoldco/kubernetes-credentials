@@ -110,3 +110,14 @@ $ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-cred
 **Note:** You can customise this credentials-controller file. This is a general
 purpose ReplicaSet. `K8S_NAMESPACE` and `MANIFOLD_AUTH_TOKEN` are required
 environment variables.
+
+## Releasing
+
+To release a new version of this package, use the Make target `release`:
+
+```
+$ VERSION=0.1.2 make release
+```
+
+This will update the Version in `version.go`, commit the changes and set up a
+new tag.
