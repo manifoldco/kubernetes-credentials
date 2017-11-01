@@ -25,10 +25,11 @@ var (
 
 // Client is a wrapper around the manifold client.
 type Client struct {
+	*manifold.Client
+	TeamID *manifold.ID
+
 	sync.RWMutex
-	cl         *manifold.Client
 	team       *string
-	teamID     *manifold.ID
 	projectIDs map[string]*manifold.ID
 }
 
@@ -36,7 +37,7 @@ type Client struct {
 // provided team.
 func New(cl *manifold.Client, team *string) (*Client, error) {
 	c := &Client{
-		cl:         cl,
+		Client:     cl,
 		team:       team,
 		projectIDs: map[string]*manifold.ID{},
 	}
@@ -103,7 +104,7 @@ func (c *Client) GetResourcesCredentialValues(ctx context.Context, project *stri
 		resourceNames[res.ID] = res.Body.Label
 	}
 
-	credList := c.cl.Credentials.List(ctx, resourceIDs)
+	credList := c.Client.Credentials.List(ctx, resourceIDs)
 	defer credList.Close()
 
 	resourceCredentials := map[string][]*primitives.CredentialValue{}
@@ -231,9 +232,9 @@ func (c *Client) GetResources(ctx context.Context, project *string, res []*primi
 		return nil, err
 	}
 
-	resourceList := c.cl.Resources.List(ctx, &manifold.ResourcesListOpts{
+	resourceList := c.Client.Resources.List(ctx, &manifold.ResourcesListOpts{
 		ProjectID: pID,
-		TeamID:    c.teamID,
+		TeamID:    c.TeamID,
 	})
 	defer resourceList.Close()
 
@@ -267,9 +268,9 @@ func (c *Client) ProjectID(label *string) (*manifold.ID, error) {
 		return v, nil
 	}
 
-	projectList := c.cl.Projects.List(context.Background(), &manifold.ProjectsListOpts{
+	projectList := c.Client.Projects.List(context.Background(), &manifold.ProjectsListOpts{
 		Label:  label,
-		TeamID: c.teamID,
+		TeamID: c.TeamID,
 	})
 	defer projectList.Close()
 
@@ -313,7 +314,7 @@ func (c *Client) ensureTeamID() error {
 		return nil
 	}
 
-	teamsList := c.cl.Teams.List(context.Background())
+	teamsList := c.Client.Teams.List(context.Background())
 	defer teamsList.Close()
 
 	for teamsList.Next() {
@@ -323,7 +324,7 @@ func (c *Client) ensureTeamID() error {
 		}
 
 		if team.Body.Label == *c.team {
-			c.teamID = &team.ID
+			c.TeamID = &team.ID
 			return nil
 		}
 	}
