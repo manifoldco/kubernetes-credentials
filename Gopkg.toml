@@ -14,6 +14,6 @@
   name = "k8s.io/client-go"
   version = "v5.0.0"
 
-[[constraint]]
+[[override]]
   name = "github.com/manifoldco/go-manifold"
-  version = "0.8.3"
+  branch = "jelmer-move-in-integrations"

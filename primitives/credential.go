@@ -1,6 +1,6 @@
 package primitives
 
-import "log"
+import "github.com/manifoldco/go-manifold/integrations/primitives"
 
 // CredentialSpec represents the specification that is required to filter out
 // specific credentials in the Resource spec.
@@ -10,14 +10,14 @@ type CredentialSpec struct {
 	Default string `json:"default,omitempty"`
 }
 
-// Valid will validate the CredentialSpec.
-func (c *CredentialSpec) Valid() bool {
-	if c.Key == "" {
-		log.Printf("Credential: invalid key")
-		return false
+// ManifoldPrimitive converts the CredentialSpec to a manifold project integration
+// primitive.
+func (cs *CredentialSpec) ManifoldPrimitive() *primitives.Credential {
+	return &primitives.Credential{
+		Key:     cs.Key,
+		Name:    cs.Name,
+		Default: cs.Default,
 	}
-
-	return true
 }
 
 // CredentialValue is a simple representation of the actual key/value of a

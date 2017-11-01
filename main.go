@@ -15,12 +15,12 @@ import (
 	"k8s.io/client-go/rest"
 
 	"github.com/manifoldco/go-manifold"
+	"github.com/manifoldco/go-manifold/integrations"
 
 	"github.com/manifoldco/kubernetes-credentials/controller"
 	"github.com/manifoldco/kubernetes-credentials/crd"
 	"github.com/manifoldco/kubernetes-credentials/crd/projects"
 	"github.com/manifoldco/kubernetes-credentials/crd/resources"
-	"github.com/manifoldco/kubernetes-credentials/helpers/client"
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
@@ -65,7 +65,7 @@ func main() {
 		manifold.WithAPIToken(os.Getenv("MANIFOLD_API_TOKEN")),
 		manifold.WithUserAgent(fmt.Sprintf("kubernetes-%s", Version)),
 	)
-	wrapper, err := client.New(manifoldClient, ptr(os.Getenv("MANIFOLD_TEAM")))
+	wrapper, err := integrations.NewClient(manifoldClient, ptr(os.Getenv("MANIFOLD_TEAM")))
 	if err != nil {
 		log.Fatal(err)
 	}

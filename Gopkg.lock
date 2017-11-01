@@ -170,10 +170,10 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "jelmer-move-in-integrations"
   name = "github.com/manifoldco/go-manifold"
   packages = [".","errors","idtype"]
-  revision = "862735f1fd67b174923ceb5bee05f6f60b2f4bbc"
-  version = "v0.8.5"
+  revision = "f8be8aeed38bd95b0ed0f25b8e1a936ddd3fba99"
 
 [[projects]]
   branch = "master"
@@ -268,6 +268,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "86677b0fdd98bad301b261890071688ebada5f4743252df48b11a235de761de9"
+  inputs-digest = "f5940300e1940e34d25b8091e1cfc2a6d600f818e34a0fc5e5282516fbbf66f5"
   solver-name = "gps-cdcl"
   solver-version = 1

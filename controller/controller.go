@@ -15,8 +15,8 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/cache"
 
+	"github.com/manifoldco/go-manifold/integrations"
 	"github.com/manifoldco/kubernetes-credentials/crd"
-	"github.com/manifoldco/kubernetes-credentials/helpers/client"
 	"github.com/manifoldco/kubernetes-credentials/primitives"
 )
 
@@ -30,12 +30,12 @@ var (
 type Controller struct {
 	kc        *kubernetes.Clientset
 	rc        *rest.RESTClient
-	mc        *client.Client
+	mc        *integrations.Client
 	namespace string
 }
 
 // New returns a new controller
-func New(kc *kubernetes.Clientset, rc *rest.RESTClient, mc *client.Client) *Controller {
+func New(kc *kubernetes.Clientset, rc *rest.RESTClient, mc *integrations.Client) *Controller {
 	return &Controller{kc: kc, rc: rc, mc: mc}
 }
 
@@ -90,13 +90,13 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 	project := obj.(*primitives.Project)
 	ctx := context.Background()
 
-	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Name, project.Spec.Resources)
+	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Name, project.Spec.ManifoldPrimitive().Resources)
 	if err != nil {
 		log.Print("Error getting the credentials:", err)
 		return
 	}
 
-	cmap, err := client.FlattenResourcesCredentialValues(creds)
+	cmap, err := integrations.FlattenResourcesCredentialValues(creds)
 	if err != nil {
 		log.Print("Error flattening credentials:", err)
 		return
@@ -122,13 +122,13 @@ func (c *Controller) createOrUpdateResource(obj interface{}) {
 	resource := obj.(*primitives.Resource)
 	ctx := context.Background()
 
-	creds, err := c.mc.GetResourceCredentialValues(ctx, nil, resource.Spec)
+	creds, err := c.mc.GetResourceCredentialValues(ctx, nil, resource.Spec.ManifoldPrimitive())
 	if err != nil {
 		log.Print("Error getting the credentials:", err)
 		return
 	}
 
-	cmap, err := client.FlattenResourceCredentialValues(creds)
+	cmap, err := integrations.FlattenResourceCredentialValues(creds)
 	if err != nil {
 		log.Print("Error flattening credentials:", err)
 		return
