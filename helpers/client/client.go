@@ -309,7 +309,7 @@ func (c *Client) setCachedProjectID(label string, id *manifold.ID) {
 }
 
 func (c *Client) ensureTeamID() error {
-	if c.team == nil {
+	if c.team == nil || *c.team == "" {
 		// no team specified, skip it
 		return nil
 	}
