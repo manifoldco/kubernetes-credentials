@@ -1,8 +1,7 @@
 package primitives
 
 import (
-	"fmt"
-
+	"github.com/manifoldco/go-manifold/integrations/primitives"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -12,16 +11,6 @@ type Project struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata"`
 	Spec              *ProjectSpec `json:"spec"`
-}
-
-// Valid will validate the Project.
-func (p *Project) Valid() bool {
-	if p.Spec == nil {
-		fmt.Println("no project spec")
-		return false
-	}
-
-	return p.Spec.Valid()
 }
 
 // ProjectList represents a list of available ProjectConfigurations in the
@@ -41,18 +30,17 @@ type ProjectSpec struct {
 	Resources []*ResourceSpec `json:"resources,omitempty"`
 }
 
-// Valid will validate the ProjectSpec.
-func (p *ProjectSpec) Valid() bool {
-	if p.Name == "" {
-		fmt.Println("no project spec name")
-		return false
+// ManifoldPrimitive converts the ProjectSpec to a manifold project integration
+// primitive.
+func (ps *ProjectSpec) ManifoldPrimitive() *primitives.Project {
+	resources := make([]*primitives.Resource, len(ps.Resources))
+	for i, r := range ps.Resources {
+		resources[i] = r.ManifoldPrimitive()
 	}
 
-	for _, r := range p.Resources {
-		if !r.Valid() {
-			return false
-		}
+	return &primitives.Project{
+		Name:      ps.Name,
+		Team:      ps.Team,
+		Resources: resources,
 	}
-
-	return true
 }

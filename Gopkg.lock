@@ -71,13 +71,13 @@
   branch = "master"
   name = "github.com/go-openapi/runtime"
   packages = ["."]
-  revision = "e8231e16de5bcda9839e03ae07c5c96a1fd82041"
+  revision = "4ab0c2c86df53f4f138421a6b88d53dd9fd30254"
 
 [[projects]]
   branch = "master"
   name = "github.com/go-openapi/spec"
   packages = ["."]
-  revision = "84b5bee7bcb76f3d17bcbaf421bac44bd5709ca6"
+  revision = "a4fa9574c7aa73b2fc54e251eb9524d0482bb592"
 
 [[projects]]
   branch = "master"
@@ -89,7 +89,7 @@
   branch = "master"
   name = "github.com/go-openapi/swag"
   packages = ["."]
-  revision = "f3f9494671f93fcff853e3c6e9e948b3eb71e590"
+  revision = "cf0bdb963811675a4d7e74901cefc7411a1df939"
 
 [[projects]]
   name = "github.com/gogo/protobuf"
@@ -107,7 +107,7 @@
   branch = "master"
   name = "github.com/golang/protobuf"
   packages = ["proto","ptypes","ptypes/any","ptypes/duration","ptypes/timestamp"]
-  revision = "1643683e1b54a9e88ad26d98f81400c8c9d9f4f9"
+  revision = "1e59b77b52bf8e4b449a57e6f79f21226d571845"
 
 [[projects]]
   branch = "master"
@@ -131,7 +131,7 @@
   branch = "master"
   name = "github.com/gregjones/httpcache"
   packages = [".","diskcache"]
-  revision = "c1f8028e62adb3d518b823a2f8e6a95c38bdd3aa"
+  revision = "2bcd89a1743fd4b373f7370ce8ddc14dfbd18229"
 
 [[projects]]
   branch = "master"
@@ -142,8 +142,8 @@
 [[projects]]
   name = "github.com/json-iterator/go"
   packages = ["."]
-  revision = "6240e1e7983a85228f7fd9c3e1b6932d46ec58e2"
-  version = "1.0.3"
+  revision = "f7279a603edee96fe7764d3de9c6ff8cf9970994"
+  version = "1.0.4"
 
 [[projects]]
   branch = "master"
@@ -155,7 +155,7 @@
   branch = "master"
   name = "github.com/mailru/easyjson"
   packages = ["buffer","jlexer","jwriter"]
-  revision = "4d347d79dea0067c945f374f990601decb08abb5"
+  revision = "32fa128f234d041f196a9f3e0fea5ac9772c08e1"
 
 [[projects]]
   name = "github.com/manifoldco/go-base32"
@@ -171,9 +171,9 @@
 
 [[projects]]
   name = "github.com/manifoldco/go-manifold"
-  packages = [".","errors","idtype"]
-  revision = "862735f1fd67b174923ceb5bee05f6f60b2f4bbc"
-  version = "v0.8.5"
+  packages = [".","errors","idtype","integrations","integrations/primitives"]
+  revision = "c5f61c8a34f79631f4eee390910141f8fc54fe3d"
+  version = "v0.9.0"
 
 [[projects]]
   branch = "master"
@@ -203,19 +203,19 @@
   branch = "master"
   name = "golang.org/x/crypto"
   packages = ["ed25519","ed25519/internal/edwards25519","pbkdf2","scrypt"]
-  revision = "bd6f299fb381e4c3393d1c4b1f0b94f5e77650c8"
+  revision = "9f005a07e0d31d45e6656d241bb5c0f2efd4bc94"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/net"
   packages = ["context","http2","http2/hpack","idna","lex/httplex"]
-  revision = "c73622c77280266305273cb545f54516ced95b93"
+  revision = "9dfe39835686865bff950a07b394c12a98ddc811"
 
 [[projects]]
   branch = "master"
   name = "golang.org/x/text"
   packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable","width"]
-  revision = "7d4e23b25beca3bc3b804ab134f0b12b4ca909d1"
+  revision = "88f656faf3f37f690df1a32515b479415e1a6769"
 
 [[projects]]
   name = "gopkg.in/inf.v0"
@@ -233,7 +233,7 @@
   branch = "v2"
   name = "gopkg.in/yaml.v2"
   packages = ["."]
-  revision = "eb3733d160e74a9c7e442f435eb3bea458e1d19f"
+  revision = "287cf08546ab5e7e37d55a84f7ed3fd1db036de5"
 
 [[projects]]
   name = "k8s.io/api"
@@ -263,11 +263,11 @@
   branch = "master"
   name = "k8s.io/kube-openapi"
   packages = ["pkg/common"]
-  revision = "d52097ab4580a8f654862188cd66db48e87f62a3"
+  revision = "39a7bf85c140f972372c2a0d1ee40adbf0c8bfe1"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "86677b0fdd98bad301b261890071688ebada5f4743252df48b11a235de761de9"
+  inputs-digest = "d22ac872d934b853c431244dbaf66a91fe301fee55714e24539590dbb4be8326"
   solver-name = "gps-cdcl"
   solver-version = 1
