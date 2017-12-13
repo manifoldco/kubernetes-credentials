@@ -2,6 +2,8 @@ package controller
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 	"log"
 	"time"
 
@@ -102,11 +104,13 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 		return
 	}
 
-	secretData := make(map[string][]byte)
-	for k, v := range cmap {
-		secretData[k] = []byte(v)
+	// determine if we need to decode values or not
+	encodingKeys := map[string]string{}
+	for _, resource := range project.Spec.Resources {
+		encodingResourceKeys(resource, encodingKeys)
 	}
 
+	secretData := decodedByteMap(cmap, encodingKeys)
 	c.createOrUpdateSecret(&project.ObjectMeta, secretData, projectControllerKind)
 }
 
@@ -134,11 +138,11 @@ func (c *Controller) createOrUpdateResource(obj interface{}) {
 		return
 	}
 
-	secretData := make(map[string][]byte)
-	for k, v := range cmap {
-		secretData[k] = []byte(v)
-	}
+	// determine if we need to decode values or not
+	encodingKeys := map[string]string{}
+	encodingResourceKeys(resource.Spec, encodingKeys)
 
+	secretData := decodedByteMap(cmap, encodingKeys)
 	c.createOrUpdateSecret(&resource.ObjectMeta, secretData, resourceControllerKind)
 }
 func (c *Controller) onResourceDelete(obj interface{}) {
@@ -167,4 +171,45 @@ func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[s
 	if err != nil {
 		log.Print("Error syncing secret:", err)
 	}
+}
+
+func decodeValue(encoding, value string) ([]byte, error) {
+	switch encoding {
+	case "base64":
+		return base64.StdEncoding.DecodeString(value)
+	default:
+		return nil, fmt.Errorf("Encoding '%s' not supported", encoding)
+	}
+}
+
+func encodingResourceKeys(r *primitives.ResourceSpec, keys map[string]string) {
+	for _, cred := range r.Credentials {
+		if cred.Encoding != "" {
+			k := cred.Key
+			if cred.Name != "" {
+				k = cred.Name
+			}
+
+			keys[k] = cred.Encoding
+		}
+	}
+}
+
+func decodedByteMap(cmap, encodingKeys map[string]string) map[string][]byte {
+	secretData := make(map[string][]byte)
+	for k, v := range cmap {
+		var bts = []byte(v)
+
+		if e, ok := encodingKeys[k]; ok {
+			var err error
+			bts, err = decodeValue(e, v)
+			if err != nil {
+				log.Printf("Error decoding value for key '%s': %s", k, err.Error())
+			}
+		}
+
+		secretData[k] = bts
+	}
+
+	return secretData
 }
