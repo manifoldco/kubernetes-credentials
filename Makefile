@@ -17,16 +17,16 @@ ci: $(LINTERS) test
 
 BOOTSTRAP=\
 	github.com/golang/dep/cmd/dep \
-	github.com/alecthomas/gometalinter \
-	github.com/kubernetes/code-generator/cmd/deepcopy-gen
+	github.com/alecthomas/gometalinter
 
 $(BOOTSTRAP):
 	go get -u $@
+
 bootstrap: $(BOOTSTRAP)
 	gometalinter --install
 
 vendor: Gopkg.lock
-	dep ensure -vendor-only
+	dep ensure -v -vendor-only
 
 .PHONY: bootstrap $(BOOTSTRAP)
 
@@ -34,14 +34,20 @@ vendor: Gopkg.lock
 # Building
 #################################################
 
-primitives/zz_generated.go: $(wildcard primitives,*.go)
-	deepcopy-gen -v=5 -i github.com/manifoldco/kubernetes-credentials/primitives -O zz_generated
+deepcopy-gen:
+	go get -u k8s.io/code-generator/cmd/deepcopy-gen
+
+primitives/zz_generated.go: deepcopy-gen $(wildcard primitives,*.go)
+	deepcopy-gen -v=5 -h boilerplate.go.txt -i github.com/manifoldco/kubernetes-credentials/primitives -O zz_generated
 
 bin/controller: vendor primitives/zz_generated.go
 	CGO_ENABLED=0 GOOS=linux go build -a -o bin/controller .
 
-docker: bin/controller
-	docker build -f Dockerfile.dev -t manifoldco/kubernetes-credentials-controller .
+docker-dev: bin/controller
+	docker build -f Dockerfile.dev -t manifoldco/kubernetes-credentials .
+
+docker:
+	docker build -t manifoldco/kubernetes-credentials .
 
 .PHONY: generated
 
