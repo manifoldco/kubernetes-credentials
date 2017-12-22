@@ -116,7 +116,7 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 
 func (c *Controller) onProjectDelete(obj interface{}) {
 	project := obj.(*primitives.Project)
-	c.kc.Core().Secrets(project.Namespace).Delete(project.Name+"-credentials", &metav1.DeleteOptions{})
+	c.kc.Core().Secrets(project.Namespace).Delete(project.Name, &metav1.DeleteOptions{})
 }
 
 func (c *Controller) onResourceAdd(obj interface{})         { c.createOrUpdateResource(obj) }
@@ -147,13 +147,13 @@ func (c *Controller) createOrUpdateResource(obj interface{}) {
 }
 func (c *Controller) onResourceDelete(obj interface{}) {
 	resource := obj.(*primitives.Resource)
-	c.kc.Core().Secrets(resource.Namespace).Delete(resource.Name+"-credentials", &metav1.DeleteOptions{})
+	c.kc.Core().Secrets(resource.Namespace).Delete(resource.Name, &metav1.DeleteOptions{})
 }
 
 func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[string][]byte, gkv schema.GroupVersionKind) {
 	secret := v1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
-			Name:      meta.Name + "-credentials",
+			Name:      meta.Name,
 			Namespace: meta.Namespace,
 			OwnerReferences: []metav1.OwnerReference{
 				*metav1.NewControllerRef(meta, gkv),
