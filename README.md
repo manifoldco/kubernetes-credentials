@@ -78,6 +78,30 @@ the new value.
 By using exsiting Kubernetes secrets, we allow you to use the Manifold
 credentials as secrets. We've [provided an example manifest file](_examples/secrets-usage/manifest.yml).
 
+### Defining secret types
+
+Kubernetes allows you to set up different types of secrets, such as Opaque,
+Docker Registry, TLS, ….
+
+The Manifold CRD allows you to create Opaque and Docker Registry types. The
+Opaque type is the default and is transparant, meaning that all credentials
+that are available through your custom resource will be loaded as a secret.
+
+#### Docker Registry
+
+Using the Docker Registry type it's possible to create a secret which will make
+it possible to pull images from a private registry. This secret type requires
+you to have the following credentials available:
+
+- `DOCKER_USERNAME`
+- `DOCKER_EMAIL`
+- `DOCKER_PASSWORD`
+
+There is the optional `DOCKER_SERVER` if your registry is anything other than
+Docker Hub.
+
+We've provided [an example](_examples/docker-registry/manifest.yml) on how to use the `docker-registry` secret type.
+
 ## Installation
 
 ### Setting up the controller
