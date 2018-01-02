@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- Added the posibility to specify the secret type that needs to be generated for a resource.
+
 ### Changed
 
 - Put the default controller deployment in it's own namespace.
