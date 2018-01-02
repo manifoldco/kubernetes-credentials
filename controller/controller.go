@@ -111,7 +111,7 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 	}
 
 	secretData := decodedByteMap(cmap, encodingKeys)
-	c.createOrUpdateSecret(&project.ObjectMeta, secretData, projectControllerKind)
+	c.createOrUpdateSecret(&project.ObjectMeta, secretData, project.Spec.SecretType(), projectControllerKind)
 }
 
 func (c *Controller) onProjectDelete(obj interface{}) {
@@ -143,14 +143,20 @@ func (c *Controller) createOrUpdateResource(obj interface{}) {
 	encodingResourceKeys(resource.Spec, encodingKeys)
 
 	secretData := decodedByteMap(cmap, encodingKeys)
-	c.createOrUpdateSecret(&resource.ObjectMeta, secretData, resourceControllerKind)
+	c.createOrUpdateSecret(&resource.ObjectMeta, secretData, resource.Spec.SecretType(), resourceControllerKind)
 }
 func (c *Controller) onResourceDelete(obj interface{}) {
 	resource := obj.(*primitives.Resource)
 	c.kc.Core().Secrets(resource.Namespace).Delete(resource.Name, &metav1.DeleteOptions{})
 }
 
-func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[string][]byte, gkv schema.GroupVersionKind) {
+func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[string][]byte, secretType v1.SecretType, gkv schema.GroupVersionKind) {
+	data, err := secretData(secrets, secretType)
+	if err != nil {
+		log.Print("Error creating secret data: ", err)
+		return
+	}
+
 	secret := v1.Secret{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      meta.Name,
@@ -159,11 +165,12 @@ func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[s
 				*metav1.NewControllerRef(meta, gkv),
 			},
 		},
-		Data: secrets,
+		Data: data,
+		Type: secretType,
 	}
 
 	s := c.kc.Core().Secrets(meta.Namespace)
-	_, err := s.Update(&secret)
+	_, err = s.Update(&secret)
 	if apierrors.IsNotFound(err) {
 		_, err = s.Create(&secret)
 	}
