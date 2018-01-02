@@ -1,0 +1,27 @@
+apiVersion: manifold.co/v1
+kind: Project
+metadata:
+  name: manifold-docker-registry
+spec:
+  project: manifold-terraform
+  type: docker-registry
+  resources:
+    - resource: docker
+
+
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: private-application
+spec:
+  template:
+    spec:
+      # by providing this, we tell kubernetes to use the previously generated
+      # secrets to authenticate with our registry.
+      imagePullSecrets:
+      - name: manifold-docker-registry
+      containers:
+      - image: manifoldco/private-application
+        name: private-application
+status: {}
