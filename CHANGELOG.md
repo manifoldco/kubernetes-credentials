@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [0.1.0] - 2018-01-03
+
 ### Added
 
 - Added the posibility to specify the secret type that needs to be generated for a resource.
