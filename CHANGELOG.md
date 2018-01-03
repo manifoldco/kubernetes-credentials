@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+### Added
+
+- Added the posibility to specify the secret type that needs to be generated for a resource.
+
+### Changed
+
+- Put the default controller deployment in it's own namespace.
+- Removed the `-credentials` suffix from the generated secrets.
+
 ## [0.0.4] - 2017-11-20
 
 ### Fixed

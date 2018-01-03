@@ -2,6 +2,7 @@ package primitives
 
 import (
 	"github.com/manifoldco/go-manifold/integrations/primitives"
+	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -27,7 +28,20 @@ type ProjectList struct {
 type ProjectSpec struct {
 	Name      string          `json:"project,name"`
 	Team      string          `json:"team,omitempty"`
+	Type      string          `json:"type,omitempty"`
 	Resources []*ResourceSpec `json:"resources,omitempty"`
+}
+
+// SecretType returns the type of secret that should be generated for this spec.
+func (ps *ProjectSpec) SecretType() v1.SecretType {
+	t, err := secretType(ps.Type)
+
+	// TODO jelmer: once we've put in validation, we can ignore this error.
+	if err != nil {
+		panic(err)
+	}
+
+	return t
 }
 
 // ManifoldPrimitive converts the ProjectSpec to a manifold project integration

@@ -3,7 +3,7 @@
 /*
 BSD 3-Clause License
 
-Copyright (c) 2017, Arigato Machine Inc.
+Copyright (c) 2018, Arigato Machine Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

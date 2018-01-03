@@ -78,29 +78,35 @@ the new value.
 By using exsiting Kubernetes secrets, we allow you to use the Manifold
 credentials as secrets. We've [provided an example manifest file](_examples/secrets-usage/manifest.yml).
 
+### Defining secret types
+
+Kubernetes allows you to set up different types of secrets, such as Opaque,
+Docker Registry, TLS, ….
+
+The Manifold CRD allows you to create Opaque and Docker Registry types. The
+Opaque type is the default and is transparant, meaning that all credentials
+that are available through your custom resource will be loaded as a secret.
+
+#### Docker Registry
+
+Using the Docker Registry type it's possible to create a secret which will make
+it possible to pull images from a private registry. This secret type requires
+you to have the following credentials available:
+
+- `DOCKER_USERNAME`
+- `DOCKER_EMAIL`
+- `DOCKER_PASSWORD`
+
+There is the optional `DOCKER_SERVER` if your registry is anything other than
+Docker Hub.
+
+We've provided [an example](_examples/docker-registry/manifest.yml) on how to use the `docker-registry` secret type.
+
 ## Installation
-
-### Setting up the Manifold Auth Token to retrieve the credentials
-
-First, you'll need to create a new Auth Token:
-
-```
-$ manifold tokens create
-```
-
-Once you have the token, you'll want to create a new Kubernetes Secret:
-
-```
-$ kubectl create secret generic manifold-secrets --from-literal=api_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
-```
-
-**Note:** The team value is optional. If a team is provided in the controller
-(see below), only resources that define this team will be picked up and used
-to load the credentials. If no team is defined, this is ignored.
 
 ### Setting up the controller
 
-Next, you'll need to set up the controller. The controller takes care of
+First, you'll need to set up the controller. The controller takes care of
 monitoring your Resource Definitions and populating the correct Kubernetes
 Secrets with Manifold Credentials. Without it, nothing will happen.
 
@@ -109,8 +115,27 @@ $ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-cred
 ```
 
 **Note:** You can customise this credentials-controller file. This is a general
-purpose ReplicaSet. `K8S_NAMESPACE` and `MANIFOLD_AUTH_TOKEN` are required
-environment variables.
+purpose Deployment. `MANIFOLD_API_TOKEN` is a required environment variable for
+the controller.
+
+### Setting up the Manifold Auth Token to retrieve the credentials
+
+Once the controller is installed, you'll also want to enable access to the
+Manifold API. First, you'll need to create a new Auth Token:
+
+```
+$ manifold tokens create
+```
+
+Once you have the token, you'll want to create a new Kubernetes Secret:
+
+```
+$ kubectl create --namespace=manifold-system secret generic manifold-api-secrets --from-literal=api_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
+```
+
+**Note:** The team value is optional. If a team is provided in the controller
+(see below), only resources that define this team will be picked up and used
+to load the credentials. If no team is defined, this is ignored.
 
 ## Releasing
 

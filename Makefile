@@ -37,6 +37,8 @@ vendor: Gopkg.lock
 deepcopy-gen:
 	go get -u k8s.io/code-generator/cmd/deepcopy-gen
 
+generated: primitives/zz_generated.go
+
 primitives/zz_generated.go: deepcopy-gen $(wildcard primitives,*.go)
 	deepcopy-gen -v=5 -h boilerplate.go.txt -i github.com/manifoldco/kubernetes-credentials/primitives -O zz_generated
 
@@ -58,13 +60,15 @@ docker:
 test: vendor
 	@CGO_ENABLED=0 go test -v ./...
 
+lint: $(LINTERS)
+
 METALINT=gometalinter --tests --disable-all --vendor --deadline=5m -e "zz_.*\.go" \
 	 ./... --enable
 
 $(LINTERS): vendor
 	$(METALINT) $@
 
-.PHONY: $(LINTERS) test
+.PHONY: $(LINTERS) test lint
 
 #################################################
 # Releasing
