@@ -104,6 +104,26 @@ We've provided [an example](_examples/docker-registry/manifest.yml) on how to us
 
 ## Installation
 
+### Setting up the Manifold Auth Token to retrieve the credentials
+
+Once the controller is installed, you'll also want to enable access to the
+Manifold API. First, you'll need to create a new Auth Token:
+
+```
+$ manifold tokens create
+```
+
+Once you have the token, you'll want to create a new Kubernetes Secret:
+
+```
+$ kubectl create namespace manifold-system
+$ kubectl create --namespace=manifold-system secret generic manifold-api-secrets --from-literal=api_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
+```
+
+**Note:** The team value is optional. If a team is provided in the controller
+(see below), only resources that define this team will be picked up and used
+to load the credentials. If no team is defined, this is ignored.
+
 ### Setting up the controller
 
 First, you'll need to set up the controller. The controller takes care of
@@ -118,24 +138,14 @@ $ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-cred
 purpose Deployment. `MANIFOLD_API_TOKEN` is a required environment variable for
 the controller.
 
-### Setting up the Manifold Auth Token to retrieve the credentials
+#### With RBAC installed
 
-Once the controller is installed, you'll also want to enable access to the
-Manifold API. First, you'll need to create a new Auth Token:
-
-```
-$ manifold tokens create
-```
-
-Once you have the token, you'll want to create a new Kubernetes Secret:
+To use RBAC, we'll add additional ClusterRoles to allow managing CRDs and
+secrets.
 
 ```
-$ kubectl create --namespace=manifold-system secret generic manifold-api-secrets --from-literal=api_token=<AUTH_TOKEN> --from-literal=team=<MANIFOLD_TEAM>
+$ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-credentials/master/rbac.yml
 ```
-
-**Note:** The team value is optional. If a team is provided in the controller
-(see below), only resources that define this team will be picked up and used
-to load the credentials. If no team is defined, this is ignored.
 
 ## Releasing
 
