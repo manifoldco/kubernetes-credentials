@@ -198,8 +198,8 @@
     "integrations",
     "integrations/primitives"
   ]
-  revision = "099739a662ef2ebf737d10e028fef2851a03bfe1"
-  version = "v0.9.2"
+  revision = "bf5e86535784387584099b8ed3ad17f737a2cc93"
+  version = "v0.9.4"
 
 [[projects]]
   branch = "master"
@@ -443,6 +443,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "97cab40966483750477e9861f4167e7128ace545c15e250748b5860f3d0450f1"
+  inputs-digest = "01f69d978a0b6cabcf3169eef581d6704468ee2bd33689f5ad171b0c4814238d"
   solver-name = "gps-cdcl"
   solver-version = 1
