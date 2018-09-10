@@ -1,6 +1,8 @@
 package primitives
 
 import (
+	"strings"
+
 	"github.com/manifoldco/go-manifold/integrations/primitives"
 	"k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -57,4 +59,23 @@ func (ps *ProjectSpec) ManifoldPrimitive() *primitives.Project {
 		Team:      ps.Team,
 		Resources: resources,
 	}
+}
+
+// String returns a string representation of the spec
+func (ps *ProjectSpec) String() string {
+	var result []string
+
+	if ps.Name != "" {
+		result = append(result, "project: "+ps.Name)
+	}
+
+	if ps.Team != "" {
+		result = append(result, "team: "+ps.Team)
+	}
+
+	if ps.Type != "" {
+		result = append(result, "type: "+ps.Type)
+	}
+
+	return strings.Join(result, ", ")
 }
