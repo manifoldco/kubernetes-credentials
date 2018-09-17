@@ -94,7 +94,7 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 
 	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Name, project.Spec.ManifoldPrimitive().Resources)
 	if err != nil {
-		log.Print("Error getting the credentials:", err)
+		log.Printf("Error getting the credentials for %s: %s", project.Spec, err)
 		return
 	}
 
