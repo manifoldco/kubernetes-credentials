@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [0.1.3] - 2018-10-12
+
+### Added
+
+- Improve log error message when credentials fail to show project, team and type.
+
 ## [0.1.2] - 2018-08-14
 
 - Update go-manifold to v0.9.4
