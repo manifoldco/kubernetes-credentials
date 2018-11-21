@@ -143,6 +143,14 @@ the controller.
 To use RBAC, we'll add additional ClusterRoles to allow managing CRDs and
 secrets.
 
+**Note:** If you are using Google Kubernetes Engine (GKE) you may need to give
+yourself additional privileges to create the ClusterRole defined in `rbac.yaml`
+
+```
+kubectl create clusterrolebinding your-user-cluster-admin-binding --clusterrole=cluster-admin --user=your.google.cloud.email@example.org
+```
+
+Defining the `ClusterRole`:
 ```
 $ kubectl create -f https://raw.githubusercontent.com/manifoldco/kubernetes-credentials/master/rbac.yml
 ```
