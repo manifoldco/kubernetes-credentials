@@ -71,7 +71,11 @@ func main() {
 	}
 
 	ctrl := controller.New(kc, rc, wrapper)
-	go ctrl.Run(ctx)
+	go func() {
+		if err := ctrl.Run(ctx); err != nil {
+			log.WithError(err).Error("issue running the controller")
+		}
+	}()
 
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)

@@ -123,7 +123,9 @@ func (c *Controller) createOrUpdateProject(obj interface{}) {
 
 func (c *Controller) onProjectDelete(obj interface{}) {
 	project := obj.(*primitives.Project)
-	c.kc.Core().Secrets(project.Namespace).Delete(project.Name, &metav1.DeleteOptions{})
+	if err := c.kc.Core().Secrets(project.Namespace).Delete(project.Name, &metav1.DeleteOptions{}); err != nil {
+		log.WithError(err).Error("issue deleting the project")
+	}
 }
 
 func (c *Controller) onResourceAdd(obj interface{})         { c.createOrUpdateResource(obj) }
@@ -161,7 +163,9 @@ func (c *Controller) createOrUpdateResource(obj interface{}) {
 }
 func (c *Controller) onResourceDelete(obj interface{}) {
 	resource := obj.(*primitives.Resource)
-	c.kc.Core().Secrets(resource.Namespace).Delete(resource.Name, &metav1.DeleteOptions{})
+	if err := c.kc.Core().Secrets(resource.Namespace).Delete(resource.Name, &metav1.DeleteOptions{}); err != nil {
+		log.WithError(err).Error("issue deleting the resource")
+	}
 }
 
 func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[string][]byte, secretType v1.SecretType, gkv schema.GroupVersionKind) {

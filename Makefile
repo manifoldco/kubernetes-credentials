@@ -1,13 +1,4 @@
-LINTERS=\
-	gofmt \
-	golint \
-	gosimple \
-	vet \
-	misspell \
-	ineffassign \
-	deadcode
-
-ci: $(LINTERS) test
+ci: lint test
 
 .PHONY: ci
 
@@ -17,13 +8,12 @@ ci: $(LINTERS) test
 
 BOOTSTRAP=\
 	github.com/golang/dep/cmd/dep \
-	github.com/alecthomas/gometalinter
+	github.com/golangci/golangci-lint/cmd/golangci-lint
 
 $(BOOTSTRAP):
 	go get -u $@
 
 bootstrap: $(BOOTSTRAP)
-	gometalinter --install
 
 vendor: Gopkg.lock
 	dep ensure -v -vendor-only
@@ -60,15 +50,10 @@ docker:
 test: vendor
 	@CGO_ENABLED=0 go test -v ./...
 
-lint: $(LINTERS)
+lint: vendor
+	golangci-lint run -D staticcheck ./...
 
-METALINT=gometalinter --tests --disable-all --vendor --deadline=5m -e "zz_.*\.go" \
-	 ./... --enable
-
-$(LINTERS): vendor
-	$(METALINT) $@
-
-.PHONY: $(LINTERS) test lint
+.PHONY: test lint
 
 #################################################
 # Releasing
