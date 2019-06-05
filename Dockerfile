@@ -1,4 +1,4 @@
-FROM golang:1.9
+FROM golang:1.12
 WORKDIR /go/src/github.com/manifoldco/kubernetes-credentials
 COPY Makefile .
 COPY Gopkg.* ./

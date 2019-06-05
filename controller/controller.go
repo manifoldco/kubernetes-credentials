@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"log"
 	"time"
 
-	"k8s.io/api/core/v1"
+	log "github.com/sirupsen/logrus"
+	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
@@ -44,12 +44,12 @@ func New(kc *kubernetes.Clientset, rc *rest.RESTClient, mc *integrations.Client)
 // Run runs this controller
 func (c *Controller) Run(ctx context.Context) error {
 	if err := c.watchProjects(ctx); err != nil {
-		log.Println("Failed to register project watcher:", err)
+		log.WithError(err).Error("could not register project watcher")
 		return err
 	}
 
 	if err := c.watchResources(ctx); err != nil {
-		log.Println("Failed to register resource watcher:", err)
+		log.WithError(err).Error("could not register resource watcher")
 		return err
 	}
 
@@ -91,16 +91,23 @@ func (c *Controller) onProjectUpdate(old, new interface{}) { c.createOrUpdatePro
 func (c *Controller) createOrUpdateProject(obj interface{}) {
 	project := obj.(*primitives.Project)
 	ctx := context.Background()
+	l := log.WithFields(log.Fields{
+		"crd_name":      project.Name,
+		"crd_namespace": project.Namespace,
+		"project":       project.Spec.Name,
+		"team":          project.Spec.Team,
+		"type":          project.Spec.Type,
+	})
 
 	creds, err := c.mc.GetResourcesCredentialValues(ctx, &project.Spec.Name, project.Spec.ManifoldPrimitive().Resources)
 	if err != nil {
-		log.Printf("Error getting the credentials for %s: %s", project.Spec, err)
+		l.WithError(err).Error("could not get project credentials")
 		return
 	}
 
 	cmap, err := integrations.FlattenResourcesCredentialValues(creds)
 	if err != nil {
-		log.Print("Error flattening credentials:", err)
+		l.WithError(err).Error("could not flatten project credentials")
 		return
 	}
 
@@ -125,16 +132,23 @@ func (c *Controller) onResourceUpdate(old, new interface{}) { c.createOrUpdateRe
 func (c *Controller) createOrUpdateResource(obj interface{}) {
 	resource := obj.(*primitives.Resource)
 	ctx := context.Background()
+	l := log.WithFields(log.Fields{
+		"crd_name":      resource.Name,
+		"crd_namespace": resource.Namespace,
+		"resource":      resource.Spec.Name,
+		"team":          resource.Spec.Team,
+		"type":          resource.Spec.Type,
+	})
 
 	creds, err := c.mc.GetResourceCredentialValues(ctx, nil, resource.Spec.ManifoldPrimitive())
 	if err != nil {
-		log.Print("Error getting the credentials:", err)
+		l.WithError(err).Error("could not get resource credentials")
 		return
 	}
 
 	cmap, err := integrations.FlattenResourceCredentialValues(creds)
 	if err != nil {
-		log.Print("Error flattening credentials:", err)
+		l.WithError(err).Error("could not flatten resource credentials")
 		return
 	}
 
@@ -151,9 +165,14 @@ func (c *Controller) onResourceDelete(obj interface{}) {
 }
 
 func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[string][]byte, secretType v1.SecretType, gkv schema.GroupVersionKind) {
+	l := log.WithFields(log.Fields{
+		"crd_name":      meta.Name,
+		"crd_namespace": meta.Namespace,
+	})
+
 	data, err := secretData(secrets, secretType)
 	if err != nil {
-		log.Print("Error creating secret data: ", err)
+		l.WithError(err).Error("could not create secret")
 		return
 	}
 
@@ -176,7 +195,7 @@ func (c *Controller) createOrUpdateSecret(meta *metav1.ObjectMeta, secrets map[s
 	}
 
 	if err != nil {
-		log.Print("Error syncing secret:", err)
+		l.WithError(err).Error("could not sync secret")
 	}
 }
 
@@ -211,7 +230,7 @@ func decodedByteMap(cmap, encodingKeys map[string]string) map[string][]byte {
 			var err error
 			bts, err = decodeValue(e, v)
 			if err != nil {
-				log.Printf("Error decoding value for key '%s': %s", k, err.Error())
+				log.WithField("key", k).WithError(err).Error("could not decode value")
 			}
 		}
 
